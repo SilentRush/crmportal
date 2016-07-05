@@ -1,8 +1,8 @@
 import React from "react";
 import {Link} from "react-router";
 
-import Nav from "../layout/Nav";
-import Footer from "../layout/Footer";
+import Nav from "./Nav";
+import Footer from "./Footer";
 
 
 export default class Layout extends React.Component{

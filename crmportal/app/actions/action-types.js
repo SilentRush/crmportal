@@ -1,0 +1,6 @@
+// Tickets
+export const GET_TICKETS_SUCCESS = 'GET_TICKETS_SUCCESS';
+export const GET_TICKET_SUCCESS = 'GET_TICKET_SUCCESS';
+
+// Search Layout
+export const LOAD_SEARCH_LAYOUT = 'LOAD_SEARCH_LAYOUT';
