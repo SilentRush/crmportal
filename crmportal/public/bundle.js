@@ -21999,7 +21999,8 @@
 	  tickets: [],
 	  ticket: {
 	    TicketProblem: {},
-	    TicketSolution: {}
+	    TicketSolution: {},
+	    Account: {}
 	  }
 	};
 
@@ -44748,18 +44749,28 @@
 	      var $key = ticket.$key;
 	      var TicketProblem = ticket.TicketProblem;
 	      var TicketSolution = ticket.TicketSolution;
+	      var Account = ticket.Account;
 
 
 	      return _react2.default.createElement(
 	        "div",
-	        { key: $key },
+	        { key: $key, className: "ticketListContainer" },
 	        _react2.default.createElement(
-	          "h3",
-	          null,
+	          "div",
+	          { className: "ticketListItem" },
 	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { to: "tickets/" + $key },
-	            Subject
+	            "div",
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: "tickets/" + $key },
+	              Subject
+	            )
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            null,
+	            Account.AccountName
 	          )
 	        )
 	      );
@@ -44898,45 +44909,60 @@
 	      var $key = _props$ticket.$key;
 	      var TicketProblem = _props$ticket.TicketProblem;
 	      var TicketSolution = _props$ticket.TicketSolution;
+	      var Account = _props$ticket.Account;
 
 
 	      return _react2.default.createElement(
 	        "div",
-	        null,
+	        { className: "ticketDetailContainer" },
 	        _react2.default.createElement(
-	          "h3",
-	          null,
+	          "div",
+	          { className: "ticketDetailHeader" },
 	          Subject
 	        ),
 	        _react2.default.createElement(
-	          "label",
-	          null,
-	          "Id:"
-	        ),
-	        _react2.default.createElement(
-	          "p",
-	          null,
-	          $key
-	        ),
-	        _react2.default.createElement(
-	          "label",
-	          null,
-	          "Description:"
-	        ),
-	        _react2.default.createElement(
-	          "p",
-	          null,
-	          TicketProblem.Notes
-	        ),
-	        _react2.default.createElement(
-	          "label",
-	          null,
-	          "Solution:"
-	        ),
-	        _react2.default.createElement(
-	          "p",
-	          null,
-	          TicketSolution.Notes
+	          "div",
+	          { className: "ticketDetail" },
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Account:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            Account.AccountName
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Id:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            $key
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Description:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            TicketProblem.Notes
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Solution:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            TicketSolution.Notes
+	          )
 	        )
 	      );
 	    }

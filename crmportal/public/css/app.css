@@ -1,0 +1,33 @@
+.ticketDetailContainer{
+  border-radius: 5px 5px 5px 5px;
+      border: 1px solid #dddddd;
+}
+.ticketDetailContainer > .ticketDetail{
+  background: #ffffff;
+  padding: 5px;
+}
+.ticketDetailContainer > .ticketDetailHeader{
+  border-radius: 5px 5px 0px 0px;
+  border-bottom: 1px solid #b5b5b5;
+  padding: 5px;
+  background: white;
+  background: -webkit-linear-gradient(#dcdcdc, white);
+  background: -o-linear-gradient(#dcdcdc, white);
+  background: -moz-linear-gradient(#dcdcdc, white);
+  background: linear-gradient(#dcdcdc, white);
+  font-size: 1.3em;
+  font-family: Tahoma, Geneva, sans-serif;
+  font-variant: small-caps;
+}
+#app{
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 1em;
+}
+
+.ticketListContainer{
+  border-radius: 5px 5px 5px 5px;
+  border: 1px solid #dddddd;
+}
+.ticketListContainer > .ticketListItem {
+  padding:5px;
+}

@@ -5,7 +5,8 @@ const initialState = {
   tickets: [],
   ticket: {
     TicketProblem:{},
-    TicketSolution:{}
+    TicketSolution:{},
+    Account:{}
   }
 };
 

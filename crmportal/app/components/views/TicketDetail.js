@@ -5,14 +5,17 @@ export default class TicketDetail extends React.Component{
     super();
   }
   render(){
-    const { Subject, $key, TicketProblem, TicketSolution } = this.props.ticket;
+    const { Subject, $key, TicketProblem, TicketSolution, Account } = this.props.ticket;
 
     return (
-      <div>
-        <h3>{Subject}</h3>
-        <label>Id:</label><p>{$key}</p>
-        <label>Description:</label><p>{TicketProblem.Notes}</p>
-        <label>Solution:</label><p>{TicketSolution.Notes}</p>
+      <div className="ticketDetailContainer">
+        <div className="ticketDetailHeader">{Subject}</div>
+        <div className="ticketDetail">
+          <label>Account:</label><p>{Account.AccountName}</p>
+          <label>Id:</label><p>{$key}</p>
+          <label>Description:</label><p>{TicketProblem.Notes}</p>
+          <label>Solution:</label><p>{TicketSolution.Notes}</p>
+        </div>
       </div>
     )
   }
