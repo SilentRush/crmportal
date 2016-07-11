@@ -38540,7 +38540,7 @@
 
 	var _TicketDetailContainer2 = _interopRequireDefault(_TicketDetailContainer);
 
-	var _Home = __webpack_require__(277);
+	var _Home = __webpack_require__(278);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
@@ -44818,6 +44818,10 @@
 
 	var _TicketDetail2 = _interopRequireDefault(_TicketDetail);
 
+	var _AccountMiniDetail = __webpack_require__(277);
+
+	var _AccountMiniDetail2 = _interopRequireDefault(_AccountMiniDetail);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44851,8 +44855,17 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement(_TicketDetail2.default, { ticket: this.props.ticket })
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-sm-4 col-xs-12 col-md-4' },
+	          _react2.default.createElement(_AccountMiniDetail2.default, { account: this.props.ticket.Account })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-sm-8 col-xs-12 col-md-8' },
+	          _react2.default.createElement(_TicketDetail2.default, { ticket: this.props.ticket })
+	        )
 	      );
 	    }
 	  }]);
@@ -44914,7 +44927,7 @@
 
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "ticketDetailContainer" },
+	        { className: "ticketDetailContainer card-shadow" },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "ticketDetailHeader" },
@@ -44923,16 +44936,6 @@
 	        _react2.default.createElement(
 	          "div",
 	          { className: "ticketDetail" },
-	          _react2.default.createElement(
-	            "label",
-	            null,
-	            "Account:"
-	          ),
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            Account.AccountName
-	          ),
 	          _react2.default.createElement(
 	            "label",
 	            null,
@@ -44975,6 +44978,69 @@
 
 /***/ },
 /* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AccountMiniDetail = function (_React$Component) {
+	  _inherits(AccountMiniDetail, _React$Component);
+
+	  function AccountMiniDetail(props) {
+	    _classCallCheck(this, AccountMiniDetail);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AccountMiniDetail).call(this));
+	  }
+
+	  _createClass(AccountMiniDetail, [{
+	    key: "render",
+	    value: function render() {
+	      var _props$account = this.props.account;
+	      var $key = _props$account.$key;
+	      var AccountName = _props$account.AccountName;
+
+
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "ticketDetailContainer card-shadow" },
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          $key
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          AccountName
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AccountMiniDetail;
+	}(_react2.default.Component);
+
+	exports.default = AccountMiniDetail;
+
+/***/ },
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
