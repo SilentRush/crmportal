@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import * as ticketApi from '../../api/ticket-api';
 import TicketDetail from "../views/TicketDetail";
+import AccountMiniDetail from "../views/AccountMiniDetail";
 
 class TicketDetailContainer extends React.Component{
 
@@ -15,8 +16,13 @@ class TicketDetailContainer extends React.Component{
 
   render(){
     return (
-      <div>
-        <TicketDetail ticket={this.props.ticket} />
+      <div className="row">
+        <div className="col-sm-4 col-xs-12 col-md-4">
+          <AccountMiniDetail account={this.props.ticket.Account} />
+        </div>
+        <div className="col-sm-8 col-xs-12 col-md-8">
+          <TicketDetail ticket={this.props.ticket} />
+        </div>
       </div>
     )
   }
