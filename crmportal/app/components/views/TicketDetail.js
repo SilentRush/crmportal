@@ -5,13 +5,17 @@ export default class TicketDetail extends React.Component{
     super();
   }
   render(){
-    const { Subject, $key, TicketProblem, TicketSolution, Account } = this.props.ticket;
+    const { Subject, $key, Createdate, TicketProblem, TicketSolution, Account, AssignedTo } = this.props.ticket;
+    const url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + $key;
+    let d = Date(Createdate);
 
     return (
       <div className="ticketDetailContainer card-shadow">
         <div className="ticketDetailHeader">{Subject}</div>
         <div className="ticketDetail">
-          <label>Id:</label><p>{$key}</p>
+          <label>Create Date:</label><p>{d}</p>
+          <label>Assigned To:</label><p>{AssignedTo.User.UserInfo.FirstName + " " + AssignedTo.User.UserInfo.LastName}</p>
+          <a href={url}>Infor Ticket Link:  {$key}</a><br />
           <label>Description:</label><p>{TicketProblem.Notes}</p>
           <label>Solution:</label><p>{TicketSolution.Notes}</p>
         </div>

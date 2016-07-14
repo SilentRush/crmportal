@@ -22000,7 +22000,12 @@
 	  ticket: {
 	    TicketProblem: {},
 	    TicketSolution: {},
-	    Account: {}
+	    Account: {},
+	    AssignedTo: {
+	      User: {
+	        UserInfo: {}
+	      }
+	    }
 	  }
 	};
 
@@ -42890,14 +42895,14 @@
 	    value: function render() {
 	      var location = this.props.location;
 
-	      var containerStyle = { marginTop: "60px" };
+	      var containerStyle = { marginTop: "60px", marginBottom: "40px" };
 	      return _react2.default.createElement(
 	        "div",
 	        null,
 	        _react2.default.createElement(_Nav2.default, { location: location }),
 	        _react2.default.createElement(
 	          "div",
-	          { className: "container", style: containerStyle },
+	          { className: "container-fluid", style: containerStyle },
 	          this.props.children
 	        )
 	      );
@@ -44835,10 +44840,14 @@
 	var TicketDetailContainer = function (_React$Component) {
 	  _inherits(TicketDetailContainer, _React$Component);
 
-	  function TicketDetailContainer() {
+	  function TicketDetailContainer(props) {
 	    _classCallCheck(this, TicketDetailContainer);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TicketDetailContainer).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TicketDetailContainer).call(this, props));
+
+	    _this.state = { showNotes: false };
+	    _this.clickShowNotes = _this.clickShowNotes.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(TicketDetailContainer, [{
@@ -44848,18 +44857,21 @@
 	      ticketApi.getTicket(ticketId);
 	    }
 	  }, {
-	    key: 'getComponent',
-	    value: function getComponent() {}
+	    key: 'clickShowNotes',
+	    value: function clickShowNotes() {
+	      if (this.state.showNotes) this.setState({ showNotes: false });else this.setState({ showNotes: true });
+	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.log(this);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-sm-4 col-xs-12 col-md-4' },
-	          _react2.default.createElement(_AccountMiniDetail2.default, { account: this.props.ticket.Account })
+	          _react2.default.createElement(_AccountMiniDetail2.default, { account: this.props.ticket.Account, clickShowNotes: this.clickShowNotes, showNotes: this.state.showNotes })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -44920,10 +44932,14 @@
 	      var _props$ticket = this.props.ticket;
 	      var Subject = _props$ticket.Subject;
 	      var $key = _props$ticket.$key;
+	      var Createdate = _props$ticket.Createdate;
 	      var TicketProblem = _props$ticket.TicketProblem;
 	      var TicketSolution = _props$ticket.TicketSolution;
 	      var Account = _props$ticket.Account;
+	      var AssignedTo = _props$ticket.AssignedTo;
 
+	      var url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + $key;
+	      var d = Date(Createdate);
 
 	      return _react2.default.createElement(
 	        "div",
@@ -44939,13 +44955,30 @@
 	          _react2.default.createElement(
 	            "label",
 	            null,
-	            "Id:"
+	            "Create Date:"
 	          ),
 	          _react2.default.createElement(
 	            "p",
 	            null,
+	            d
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Assigned To:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            AssignedTo.User.UserInfo.FirstName + " " + AssignedTo.User.UserInfo.LastName
+	          ),
+	          _react2.default.createElement(
+	            "a",
+	            { href: url },
+	            "Infor Ticket Link:  ",
 	            $key
 	          ),
+	          _react2.default.createElement("br", null),
 	          _react2.default.createElement(
 	            "label",
 	            null,
@@ -45015,20 +45048,72 @@
 	      var _props$account = this.props.account;
 	      var $key = _props$account.$key;
 	      var AccountName = _props$account.AccountName;
+	      var Notes = _props$account.Notes;
 
+	      var hrStyle = { marginRight: "10px", marginLeft: "10px" };
+	      var NotesStyle = { whiteSpace: "pre-line", wordWrap: "break-word" };
+	      var url = "https://slxweb.sssworld.com/SlxClient/Account.aspx?entityid=" + $key;
+	      var notes = void 0,
+	          button = void 0;
+
+	      if (this.props.showNotes) {
+	        notes = _react2.default.createElement(
+	          "p",
+	          { style: NotesStyle },
+	          Notes
+	        );
+	        button = _react2.default.createElement(
+	          "button",
+	          { type: "button", className: "btn btn-default btn-sm floatRight", onClick: this.props.clickShowNotes },
+	          _react2.default.createElement("span", { className: "glyphicon glyphicon-minus-sign" })
+	        );
+	      } else {
+	        notes = _react2.default.createElement("p", { style: NotesStyle });
+	        button = _react2.default.createElement(
+	          "button",
+	          { type: "button", className: "btn btn-default btn-sm floatRight", onClick: this.props.clickShowNotes },
+	          _react2.default.createElement("span", { className: "glyphicon glyphicon-plus-sign" })
+	        );
+	      }
 
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "ticketDetailContainer card-shadow" },
+	        { className: "AccountMiniDetailContainer card-shadow" },
 	        _react2.default.createElement(
-	          "p",
-	          null,
-	          $key
+	          "h4",
+	          { className: "AccountMiniDetail-Header" },
+	          AccountName
 	        ),
 	        _react2.default.createElement(
-	          "p",
-	          null,
-	          AccountName
+	          "div",
+	          { className: "AccountMiniDetail-Img" },
+	          _react2.default.createElement("img", { src: "http://www.teradata.com/uploadedImages/At-A-Glance/Our-Partners/XTIVIA_logo.png" })
+	        ),
+	        _react2.default.createElement("hr", { style: hrStyle }),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "AccountDetail" },
+	          _react2.default.createElement(
+	            "a",
+	            { href: url },
+	            "Infor Account Link:  ",
+	            AccountName
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "stickynotes" },
+	            _react2.default.createElement(
+	              "div",
+	              null,
+	              _react2.default.createElement(
+	                "label",
+	                null,
+	                "Notes"
+	              ),
+	              button
+	            ),
+	            notes
+	          )
 	        )
 	      );
 	    }

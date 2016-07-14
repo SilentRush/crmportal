@@ -1,8 +1,8 @@
-.ticketDetailContainer{
+.ticketDetailContainer, .AccountMiniDetailContainer{
   border-radius: 4px!important;
   background: white;
 }
-.ticketDetailContainer > .ticketDetail{
+.ticketDetailContainer > .ticketDetail, .AccountMiniDetailContainer > .AccountDetail{
   background: #ffffff;
   padding: 16px;
 }
@@ -41,12 +41,13 @@ body{
   background-color: #2976a0 !important;
 
 }
-.navbar-default .navbar-nav>li>a {
-  color: white;
-}
 
 .navbar-default .navbar-brand {
-  color: white;
+  color: white !important;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+  color: #64d3ff !important;
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
@@ -54,6 +55,26 @@ body{
     color: white;
     border-bottom: 5px solid white;
 }
+
+.navbar-default .navbar-nav>li>a {
+  color: white !important;
+}
+
+.AccountMiniDetail-Header{
+  text-align: center!important;
+  padding: 10px 0px 10px 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-weight: bold;
+}
+
+.AccountMiniDetailContainer > .AccountMiniDetail-Img {
+    text-align: center!important;
+}
+.floatRight{
+  float: right;
+}
+
 
 @media (min-width: 768px){
   .navbar-nav>li>a {

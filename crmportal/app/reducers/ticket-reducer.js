@@ -6,7 +6,12 @@ const initialState = {
   ticket: {
     TicketProblem:{},
     TicketSolution:{},
-    Account:{}
+    Account:{},
+    AssignedTo:{
+      User:{
+        UserInfo:{}
+      }
+    }
   }
 };
 
