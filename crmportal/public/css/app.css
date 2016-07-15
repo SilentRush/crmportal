@@ -75,6 +75,20 @@ body{
   float: right;
 }
 
+.DivCursor{
+  cursor: pointer;
+}
+
+.NotesTab{
+  color:white;
+  background:#7d97a5;
+  padding: 5px 10px;
+}
+
+.NotesTab:hover{
+  background: #3aa6e0;
+}
+
 
 @media (min-width: 768px){
   .navbar-nav>li>a {

@@ -15,7 +15,7 @@ export default class TicketDetail extends React.Component{
         <div className="ticketDetail">
           <label>Create Date:</label><p>{d}</p>
           <label>Assigned To:</label><p>{AssignedTo.User.UserInfo.FirstName + " " + AssignedTo.User.UserInfo.LastName}</p>
-          <a href={url}>Infor Ticket Link:  {$key}</a><br />
+          <a href={url} target="blank">Infor Ticket Link:  {$key}</a><br />
           <label>Description:</label><p>{TicketProblem.Notes}</p>
           <label>Solution:</label><p>{TicketSolution.Notes}</p>
         </div>

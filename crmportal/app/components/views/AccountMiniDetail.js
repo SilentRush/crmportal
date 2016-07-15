@@ -13,15 +13,11 @@ export default class AccountMiniDetail extends React.Component{
 
     if(this.props.showNotes){
       notes = <p style={NotesStyle}>{Notes}</p>;
-      button = <button type="button" className="btn btn-default btn-sm floatRight" onClick={this.props.clickShowNotes}>
-                <span className="glyphicon glyphicon-minus-sign"></span>
-               </button>;
+      button = <span className="glyphicon glyphicon-minus-sign floatRight"></span>;
     }
     else {
-      notes = <p style={NotesStyle}></p>
-      button = <button type="button" className="btn btn-default btn-sm floatRight" onClick={this.props.clickShowNotes}>
-                <span className="glyphicon glyphicon-plus-sign"></span>
-               </button>;
+      //notes = <p style={NotesStyle}></p>
+      button = <span className="glyphicon glyphicon-plus-sign floatRight"></span>;
     }
 
     return (
@@ -32,10 +28,10 @@ export default class AccountMiniDetail extends React.Component{
         </div>
         <hr style={hrStyle} />
         <div className="AccountDetail">
-          <a href={url}>Infor Account Link:  {AccountName}</a>
+          <a href={url} target="blank">Infor Account Link:  {AccountName}</a>
           <div className="stickynotes">
-            <div>
-              <label>Notes</label>
+            <div className="DivCursor NotesTab" onClick={this.props.clickShowNotes}>
+              <span>Notes</span>
               {button}
             </div>
             {notes}
