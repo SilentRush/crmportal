@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from '../store';
+import instance from './connection-config'
 import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
 
 /**
@@ -7,9 +8,10 @@ import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
  */
 
 export function getTickets() {
-  return axios.get("../TempJs/tickets.json")
+  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  return axios.get("/tickets")
     .then(function(response){
-      store.dispatch(getTicketsSuccess(response.data.$resources));
+      store.dispatch(getTicketsSuccess(response.data.hits.hits));
     });
 }
 
@@ -44,10 +46,9 @@ export function deleteUser(userId) {
  */
 
 export function getTicket(ticketId) {
-  return axios.get("../TempJs/tickets.json").then(function(response){
-    let ticket = $.grep(response.data.$resources, function(e){
-        return e.$key == ticketId;
-    });
-    store.dispatch(getTicketSuccess(ticket[0]));
+  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  return axios.get("/tickets/" + ticketId).then(function(response){
+    console.log(response);
+    store.dispatch(getTicketSuccess(response.data._source));
   });
 }

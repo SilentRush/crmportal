@@ -21998,14 +21998,8 @@
 	var initialState = {
 	  tickets: [],
 	  ticket: {
-	    TicketProblem: {},
-	    TicketSolution: {},
-	    Account: {},
-	    AssignedTo: {
-	      User: {
-	        UserInfo: {}
-	      }
-	    }
+	    account: {},
+	    assignedto: {}
 	  }
 	};
 
@@ -38537,15 +38531,15 @@
 
 	var _SearchLayoutContainer2 = _interopRequireDefault(_SearchLayoutContainer);
 
-	var _TicketListContainer = __webpack_require__(273);
+	var _TicketListContainer = __webpack_require__(274);
 
 	var _TicketListContainer2 = _interopRequireDefault(_TicketListContainer);
 
-	var _TicketDetailContainer = __webpack_require__(275);
+	var _TicketDetailContainer = __webpack_require__(276);
 
 	var _TicketDetailContainer2 = _interopRequireDefault(_TicketDetailContainer);
 
-	var _Home = __webpack_require__(278);
+	var _Home = __webpack_require__(279);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
@@ -43218,9 +43212,9 @@
 
 	var ticketApi = _interopRequireWildcard(_ticketApi);
 
-	var _searchLayoutActions = __webpack_require__(271);
+	var _searchLayoutActions = __webpack_require__(272);
 
-	var _SearchForm = __webpack_require__(272);
+	var _SearchForm = __webpack_require__(273);
 
 	var _SearchForm2 = _interopRequireDefault(_SearchForm);
 
@@ -43276,7 +43270,11 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _ticketActions = __webpack_require__(270);
+	var _connectionConfig = __webpack_require__(270);
+
+	var _connectionConfig2 = _interopRequireDefault(_connectionConfig);
+
+	var _ticketActions = __webpack_require__(271);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43285,8 +43283,9 @@
 	 */
 
 	function getTickets() {
-	  return _axios2.default.get("../TempJs/tickets.json").then(function (response) {
-	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(response.data.$resources));
+	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+	  return _axios2.default.get("/tickets").then(function (response) {
+	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(response.data.hits.hits));
 	  });
 	}
 
@@ -43320,11 +43319,10 @@
 	 */
 
 	function getTicket(ticketId) {
-	  return _axios2.default.get("../TempJs/tickets.json").then(function (response) {
-	    var ticket = $.grep(response.data.$resources, function (e) {
-	      return e.$key == ticketId;
-	    });
-	    _store2.default.dispatch((0, _ticketActions.getTicketSuccess)(ticket[0]));
+	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+	  return _axios2.default.get("/tickets/" + ticketId).then(function (response) {
+	    console.log(response);
+	    _store2.default.dispatch((0, _ticketActions.getTicketSuccess)(response.data._source));
 	  });
 	}
 
@@ -44549,6 +44547,25 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.instance = instance;
+
+	var _axios = __webpack_require__(251);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function instance() {}
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	exports.getTicketsSuccess = getTicketsSuccess;
 	exports.getTicketSuccess = getTicketSuccess;
 
@@ -44559,6 +44576,7 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function getTicketsSuccess(tickets) {
+	  console.log(tickets);
 	  return {
 	    type: types.GET_TICKETS_SUCCESS,
 	    tickets: tickets
@@ -44566,7 +44584,6 @@
 	}
 
 	function getTicketSuccess(ticket) {
-	  console.log(ticket);
 	  return {
 	    type: types.GET_TICKET_SUCCESS,
 	    ticket: ticket
@@ -44574,7 +44591,7 @@
 	}
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44599,7 +44616,7 @@
 	}
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44638,7 +44655,7 @@
 	});
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44663,11 +44680,11 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _TicketList = __webpack_require__(274);
+	var _TicketList = __webpack_require__(275);
 
 	var _TicketList2 = _interopRequireDefault(_TicketList);
 
-	var _searchLayoutActions = __webpack_require__(271);
+	var _searchLayoutActions = __webpack_require__(272);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -44713,7 +44730,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(TicketListContainer);
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44750,16 +44767,17 @@
 	  _createClass(TicketList, [{
 	    key: "createListItem",
 	    value: function createListItem(ticket) {
-	      var Subject = ticket.Subject;
-	      var $key = ticket.$key;
-	      var TicketProblem = ticket.TicketProblem;
-	      var TicketSolution = ticket.TicketSolution;
-	      var Account = ticket.Account;
+	      var _ticket$_source = ticket._source;
+	      var subject = _ticket$_source.subject;
+	      var ticketid = _ticket$_source.ticketid;
+	      var ticketproblem = _ticket$_source.ticketproblem;
+	      var ticketsolution = _ticket$_source.ticketsolution;
+	      var account = _ticket$_source.account;
 
 
 	      return _react2.default.createElement(
 	        "div",
-	        { key: $key, className: "ticketListContainer" },
+	        { key: ticketid, className: "ticketListContainer" },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "ticketListItem" },
@@ -44768,14 +44786,14 @@
 	            null,
 	            _react2.default.createElement(
 	              _reactRouter.Link,
-	              { to: "tickets/" + $key },
-	              Subject
+	              { to: "tickets/" + ticketid },
+	              subject
 	            )
 	          ),
 	          _react2.default.createElement(
 	            "div",
 	            null,
-	            Account.AccountName
+	            account.accountname
 	          )
 	        )
 	      );
@@ -44783,7 +44801,6 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
-
 	      return _react2.default.createElement(
 	        "div",
 	        null,
@@ -44798,7 +44815,7 @@
 	exports.default = TicketList;
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44819,11 +44836,11 @@
 
 	var ticketApi = _interopRequireWildcard(_ticketApi);
 
-	var _TicketDetail = __webpack_require__(276);
+	var _TicketDetail = __webpack_require__(277);
 
 	var _TicketDetail2 = _interopRequireDefault(_TicketDetail);
 
-	var _AccountMiniDetail = __webpack_require__(277);
+	var _AccountMiniDetail = __webpack_require__(278);
 
 	var _AccountMiniDetail2 = _interopRequireDefault(_AccountMiniDetail);
 
@@ -44864,14 +44881,13 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-sm-4 col-xs-12 col-md-4' },
-	          _react2.default.createElement(_AccountMiniDetail2.default, { account: this.props.ticket.Account, clickShowNotes: this.clickShowNotes, showNotes: this.state.showNotes })
+	          _react2.default.createElement(_AccountMiniDetail2.default, { account: this.props.ticket.account, clickShowNotes: this.clickShowNotes, showNotes: this.state.showNotes })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -44894,7 +44910,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(TicketDetailContainer);
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44930,16 +44946,16 @@
 	    key: "render",
 	    value: function render() {
 	      var _props$ticket = this.props.ticket;
-	      var Subject = _props$ticket.Subject;
-	      var $key = _props$ticket.$key;
-	      var Createdate = _props$ticket.Createdate;
-	      var TicketProblem = _props$ticket.TicketProblem;
-	      var TicketSolution = _props$ticket.TicketSolution;
-	      var Account = _props$ticket.Account;
-	      var AssignedTo = _props$ticket.AssignedTo;
+	      var subject = _props$ticket.subject;
+	      var ticketid = _props$ticket.ticketid;
+	      var createdate = _props$ticket.createdate;
+	      var ticketproblem = _props$ticket.ticketproblem;
+	      var ticketsolution = _props$ticket.ticketsolution;
+	      var account = _props$ticket.account;
+	      var assignedto = _props$ticket.assignedto;
 
-	      var url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + $key;
-	      var d = Date(Createdate);
+	      var url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + ticketid;
+	      var d = Date(createdate);
 
 	      return _react2.default.createElement(
 	        "div",
@@ -44947,7 +44963,7 @@
 	        _react2.default.createElement(
 	          "div",
 	          { className: "ticketDetailHeader" },
-	          Subject
+	          subject
 	        ),
 	        _react2.default.createElement(
 	          "div",
@@ -44970,13 +44986,13 @@
 	          _react2.default.createElement(
 	            "p",
 	            null,
-	            AssignedTo.User.UserInfo.FirstName + " " + AssignedTo.User.UserInfo.LastName
+	            assignedto.username
 	          ),
 	          _react2.default.createElement(
 	            "a",
-	            { href: url },
+	            { href: url, target: "blank" },
 	            "Infor Ticket Link:  ",
-	            $key
+	            ticketid
 	          ),
 	          _react2.default.createElement("br", null),
 	          _react2.default.createElement(
@@ -44987,7 +45003,7 @@
 	          _react2.default.createElement(
 	            "p",
 	            null,
-	            TicketProblem.Notes
+	            ticketproblem
 	          ),
 	          _react2.default.createElement(
 	            "label",
@@ -44997,7 +45013,7 @@
 	          _react2.default.createElement(
 	            "p",
 	            null,
-	            TicketSolution.Notes
+	            ticketsolution
 	          )
 	        )
 	      );
@@ -45010,7 +45026,7 @@
 	exports.default = TicketDetail;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45062,18 +45078,10 @@
 	          { style: NotesStyle },
 	          Notes
 	        );
-	        button = _react2.default.createElement(
-	          "button",
-	          { type: "button", className: "btn btn-default btn-sm floatRight", onClick: this.props.clickShowNotes },
-	          _react2.default.createElement("span", { className: "glyphicon glyphicon-minus-sign" })
-	        );
+	        button = _react2.default.createElement("span", { className: "glyphicon glyphicon-minus-sign floatRight" });
 	      } else {
-	        notes = _react2.default.createElement("p", { style: NotesStyle });
-	        button = _react2.default.createElement(
-	          "button",
-	          { type: "button", className: "btn btn-default btn-sm floatRight", onClick: this.props.clickShowNotes },
-	          _react2.default.createElement("span", { className: "glyphicon glyphicon-plus-sign" })
-	        );
+	        //notes = <p style={NotesStyle}></p>
+	        button = _react2.default.createElement("span", { className: "glyphicon glyphicon-plus-sign floatRight" });
 	      }
 
 	      return _react2.default.createElement(
@@ -45095,7 +45103,7 @@
 	          { className: "AccountDetail" },
 	          _react2.default.createElement(
 	            "a",
-	            { href: url },
+	            { href: url, target: "blank" },
 	            "Infor Account Link:  ",
 	            AccountName
 	          ),
@@ -45104,9 +45112,9 @@
 	            { className: "stickynotes" },
 	            _react2.default.createElement(
 	              "div",
-	              null,
+	              { className: "DivCursor NotesTab", onClick: this.props.clickShowNotes },
 	              _react2.default.createElement(
-	                "label",
+	                "span",
 	                null,
 	                "Notes"
 	              ),
@@ -45125,7 +45133,7 @@
 	exports.default = AccountMiniDetail;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

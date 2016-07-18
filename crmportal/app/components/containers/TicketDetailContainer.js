@@ -24,11 +24,10 @@ class TicketDetailContainer extends React.Component{
   }
 
   render(){
-    console.log(this);
     return (
       <div className="row">
         <div className="col-sm-4 col-xs-12 col-md-4">
-          <AccountMiniDetail account={this.props.ticket.Account} clickShowNotes={this.clickShowNotes} showNotes={this.state.showNotes} />
+          <AccountMiniDetail account={this.props.ticket.account} clickShowNotes={this.clickShowNotes} showNotes={this.state.showNotes} />
         </div>
         <div className="col-sm-8 col-xs-12 col-md-8">
           <TicketDetail ticket={this.props.ticket} />

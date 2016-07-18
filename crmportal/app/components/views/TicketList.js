@@ -6,19 +6,18 @@ export default class TicketList extends React.Component{
     super();
   }
   createListItem(ticket){
-    const { Subject, $key, TicketProblem, TicketSolution, Account } = ticket;
+    const { subject, ticketid, ticketproblem, ticketsolution, account } = ticket._source;
 
     return (
-      <div key={$key} className="ticketListContainer">
+      <div key={ticketid} className="ticketListContainer">
         <div className="ticketListItem">
-          <div><Link to={"tickets/" +$key}>{Subject}</Link></div>
-          <div>{Account.AccountName}</div>
+          <div><Link to={"tickets/" +ticketid}>{subject}</Link></div>
+          <div>{account.accountname}</div>
         </div>
       </div>
     )
   }
   render(){
-
     return(
       <div>
         {this.props.tickets.map(this.createListItem)}

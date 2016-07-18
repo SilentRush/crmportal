@@ -4,13 +4,8 @@ import _ from 'lodash';
 const initialState = {
   tickets: [],
   ticket: {
-    TicketProblem:{},
-    TicketSolution:{},
-    Account:{},
-    AssignedTo:{
-      User:{
-        UserInfo:{}
-      }
+    account:{},
+    assignedto:{
     }
   }
 };
