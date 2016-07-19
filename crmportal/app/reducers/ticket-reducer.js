@@ -2,7 +2,9 @@ import * as types from '../actions/action-types';
 import _ from 'lodash';
 
 const initialState = {
-  tickets: [],
+  tickets: {
+    hits:[],
+  },
   ticket: {
     account:{},
     assignedto:{
@@ -11,7 +13,6 @@ const initialState = {
 };
 
 const ticketReducer = function(state = initialState, action) {
-
   switch(action.type) {
 
     case types.GET_TICKETS_SUCCESS:

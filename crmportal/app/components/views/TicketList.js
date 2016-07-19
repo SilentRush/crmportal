@@ -20,7 +20,7 @@ export default class TicketList extends React.Component{
   render(){
     return(
       <div>
-        {this.props.tickets.map(this.createListItem)}
+        {this.props.tickets.hits.map(this.createListItem)}
       </div>
     )
   }

@@ -9,6 +9,7 @@ export default class Nav extends React.Component{
     const { location } = this.props;
     const homeClass = location.pathname === "/" ? "active" : "";
     const ticketsClass = location.pathname.match(/^\/tickets/) ? "active" : "";
+    const accountsClass = location.pathname.match(/^\/accounts/) ? "active" : "";
 
     return (
         <nav className="navbar navbar-default navbar-fixed-top">
@@ -22,6 +23,7 @@ export default class Nav extends React.Component{
               <ul className="nav navbar-nav">
                 <li className={homeClass}><IndexLink to="/">Home</IndexLink></li>
                 <li className={ticketsClass}><Link to="tickets">Tickets</Link></li>
+                <li className={accountsClass}><Link to="accounts">Accounts</Link></li>
               </ul>
               <form className="navbar-form navbar-right" role="search">
                 <div className="form-group">

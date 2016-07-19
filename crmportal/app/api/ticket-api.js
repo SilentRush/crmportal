@@ -11,7 +11,8 @@ export function getTickets() {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   return axios.get("/tickets")
     .then(function(response){
-      store.dispatch(getTicketsSuccess(response.data.hits.hits));
+      let tickets = response.data.hits;
+      store.dispatch(getTicketsSuccess(tickets));
     });
 }
 
@@ -21,10 +22,20 @@ export function getTickets() {
  */
 
 export function searchTickets(query = '') {
-  return axios.get('http://localhost:3001/users?q='+ query)
+  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  return axios.get('/search/tickets/'+ query)
     .then(response => {
-      store.dispatch(getTicketsSuccess(response.data));
-      return response;
+      console.log(response.data);
+      store.dispatch(getTicketsSuccess(response.data.hits.hits));
+    });
+}
+
+export function getAccountTickets(accountid,from,size) {
+  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  return axios.get('/search/tickets/account/'+ accountid + '?from=' + from + '&size=' + size)
+    .then(response => {
+      let tickets = response.data.hits;
+      store.dispatch(getTicketsSuccess(tickets));
     });
 }
 
@@ -48,7 +59,6 @@ export function deleteUser(userId) {
 export function getTicket(ticketId) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   return axios.get("/tickets/" + ticketId).then(function(response){
-    console.log(response);
     store.dispatch(getTicketSuccess(response.data._source));
   });
 }
