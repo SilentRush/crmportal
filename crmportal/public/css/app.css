@@ -22,11 +22,9 @@
 }
 
 .ticketListContainer{
-  border-radius: 4px!important;
-  border: 1px solid #dddddd;
 }
 .ticketListContainer > .ticketListItem {
-  padding:16px;
+  padding:5px 0px;
 }
 
 .ticketListMini{

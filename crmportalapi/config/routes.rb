@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :tickets
   resources :accounts
 
-  get '/search/tickets/:query', to: 'tickets#search'
+  get '/search/tickets/:value', to: 'tickets#search'
   get '/search/tickets/account/:accountid', to: 'tickets#getAccountTickets'
+
+  get '/search/accounts/:value', to: 'accounts#search'
 end

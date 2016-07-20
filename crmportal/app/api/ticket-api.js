@@ -21,12 +21,12 @@ export function getTickets() {
  * Search users
  */
 
-export function searchTickets(query = '') {
+export function searchTickets(value,from,size) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get('/search/tickets/'+ query)
+  return axios.get('/search/tickets/'+ value + '?from=' + from + '&size=' + size)
     .then(response => {
-      console.log(response.data);
-      store.dispatch(getTicketsSuccess(response.data.hits.hits));
+      let tickets = response.data.hits;
+      store.dispatch(getTicketsSuccess(tickets));
     });
 }
 

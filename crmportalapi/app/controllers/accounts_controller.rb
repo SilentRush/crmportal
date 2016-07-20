@@ -15,7 +15,6 @@ class AccountsController < ApplicationController
 
     body = JSON.parse(res.body)
 
-    response.headers['Access-Control-Allow-Origin'] = 'http://twilkislinux.sssworld-local.com'
     render json: body
   end
 
@@ -35,7 +34,6 @@ class AccountsController < ApplicationController
 
     body = JSON.parse(res.body)
 
-    response.headers['Access-Control-Allow-Origin'] = 'http://twilkislinux.sssworld-local.com'
     render json: body
   end
 
@@ -44,5 +42,68 @@ class AccountsController < ApplicationController
 
   def destroy
   end
-  
+
+  def search
+    query = {
+      "query" => {
+        "bool" => {
+          "should" => [
+            {
+              "match":{
+                "accountname" => "#{params["value"]}"
+              }
+            },
+            {
+              "match":{
+                "notes" => "#{params["value"]}"
+              }
+            },
+            {
+              "match":{
+                "address.streetaddress" => "#{params["value"]}"
+              }
+            },
+            {
+              "match":{
+                "address.state" => "#{params["value"]}"
+              }
+            },
+            {
+              "match":{
+                "address.zip" => "#{params["value"]}"
+              }
+            },
+            {
+              "match":{
+                "address.city" => "#{params["value"]}"
+              }
+            }
+          ]
+        }
+      }
+    }
+
+    if(!params["size"].nil?)
+      query["size"] = params["size"]
+    end
+
+    if(!params["from"].nil?)
+      query["from"] = params["from"]
+    end
+
+    url = "http://localhost:9200/xtivia/account/_search"
+    uri = URI.parse(url)
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = query.to_json
+    request['Content-Type'] = 'application/json'
+    res = http.request(request)
+
+    body = JSON.parse(res.body)
+
+    render json: body
+  end
+
+
 end

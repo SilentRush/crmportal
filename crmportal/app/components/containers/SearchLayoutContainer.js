@@ -7,7 +7,10 @@ const mapStateToProps = function(store) {
   let totalResults = 0;
 
   if (searchType === 'tickets') {
-    totalResults = store.ticketState.tickets.length;
+    totalResults = store.ticketState.tickets.hits.length;
+  }
+  if (searchType === 'accounts') {
+    totalResults = store.accountState.accounts.hits.length;
   }
   return {
     searchType,

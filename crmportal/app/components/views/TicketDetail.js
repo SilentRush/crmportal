@@ -9,6 +9,7 @@ export default class TicketDetail extends React.Component{
     const { subject, ticketid, createdate, ticketproblem, ticketsolution, account, assignedto } = this.props.ticket;
     const url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + ticketid;
     let d = Date(createdate);
+    console.log(this.props.ticket);
 
     return (
       <div className="ticketDetailContainer card-shadow">

@@ -2,21 +2,23 @@ import * as types from '../actions/action-types';
 import _ from 'lodash';
 
 const initialState = {
-  accounts: [
-    {
-      _source:{
-        accountname: '',
-        accountid: '',
-        notes: '',
-        address:{
-          streetaddress: '',
-          city: '',
-          state: '',
-          zip: ''
+  accounts: {
+    hits:[
+      {
+        _source:{
+          accountname: '',
+          accountid: '',
+          notes: '',
+          address:{
+            streetaddress: '',
+            city: '',
+            state: '',
+            zip: ''
+          }
         }
       }
-    }
-  ],
+    ]
+  },
   account: {
     address:{}
   }

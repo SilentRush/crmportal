@@ -11,8 +11,7 @@ export function getAccounts() {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   return axios.get("/accounts")
     .then(function(response){
-      console.log(response.data);
-      store.dispatch(getAccountsSuccess(response.data.hits.hits));
+      store.dispatch(getAccountsSuccess(response.data.hits));
     });
 }
 
@@ -21,11 +20,12 @@ export function getAccounts() {
  * Search users
  */
 
-export function searchAccounts(query = '') {
-  return axios.get('http://localhost:3001/users?q='+ query)
+export function searchAccounts(value,from,size) {
+  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  return axios.get('/search/accounts/'+ value + '?from=' + from + '&size=' + size)
     .then(response => {
-      store.dispatch(getTicketsSuccess(response.data));
-      return response;
+      let accounts = response.data.hits;
+      store.dispatch(getAccountsSuccess(accounts));
     });
 }
 

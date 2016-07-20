@@ -1,5 +1,6 @@
 import React from 'react';
 import * as ticketApi from '../../api/ticket-api';
+import * as accountApi from '../../api/account-api';
 import { loadSearchLayout } from '../../actions/search-layout-actions';
 import SearchForm from '../views/SearchForm';
 
@@ -15,7 +16,10 @@ const SearchFormContainer = React.createClass({
     let query = this.refs.child.getQuery();
 
     if (this.props.searchType === 'tickets') {
-      ticketApi.searchTickets(query);
+      ticketApi.searchTickets(query,0,40);
+    }
+    if (this.props.searchType === 'accounts') {
+      accountApi.searchAccounts(query,0,40);
     }
   },
 

@@ -38500,19 +38500,21 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var initialState = {
-	  accounts: [{
-	    _source: {
-	      accountname: '',
-	      accountid: '',
-	      notes: '',
-	      address: {
-	        streetaddress: '',
-	        city: '',
-	        state: '',
-	        zip: ''
+	  accounts: {
+	    hits: [{
+	      _source: {
+	        accountname: '',
+	        accountid: '',
+	        notes: '',
+	        address: {
+	          streetaddress: '',
+	          city: '',
+	          state: '',
+	          zip: ''
+	        }
 	      }
-	    }
-	  }],
+	    }]
+	  },
 	  account: {
 	    address: {}
 	  }
@@ -38603,11 +38605,11 @@
 
 	var _SearchLayoutContainer2 = _interopRequireDefault(_SearchLayoutContainer);
 
-	var _TicketListContainer = __webpack_require__(275);
+	var _TicketListContainer = __webpack_require__(277);
 
 	var _TicketListContainer2 = _interopRequireDefault(_TicketListContainer);
 
-	var _TicketDetailContainer = __webpack_require__(277);
+	var _TicketDetailContainer = __webpack_require__(279);
 
 	var _TicketDetailContainer2 = _interopRequireDefault(_TicketDetailContainer);
 
@@ -43204,7 +43206,10 @@
 	  var totalResults = 0;
 
 	  if (searchType === 'tickets') {
-	    totalResults = store.ticketState.tickets.length;
+	    totalResults = store.ticketState.tickets.hits.length;
+	  }
+	  if (searchType === 'accounts') {
+	    totalResults = store.accountState.accounts.hits.length;
 	  }
 	  return {
 	    searchType: searchType,
@@ -43308,9 +43313,13 @@
 
 	var ticketApi = _interopRequireWildcard(_ticketApi);
 
-	var _searchLayoutActions = __webpack_require__(273);
+	var _accountApi = __webpack_require__(273);
 
-	var _SearchForm = __webpack_require__(274);
+	var accountApi = _interopRequireWildcard(_accountApi);
+
+	var _searchLayoutActions = __webpack_require__(275);
+
+	var _SearchForm = __webpack_require__(276);
 
 	var _SearchForm2 = _interopRequireDefault(_SearchForm);
 
@@ -43332,7 +43341,10 @@
 	    var query = this.refs.child.getQuery();
 
 	    if (this.props.searchType === 'tickets') {
-	      ticketApi.searchTickets(query);
+	      ticketApi.searchTickets(query, 0, 40);
+	    }
+	    if (this.props.searchType === 'accounts') {
+	      accountApi.searchAccounts(query, 0, 40);
 	    }
 	  },
 
@@ -43391,13 +43403,11 @@
 	 * Search users
 	 */
 
-	function searchTickets() {
-	  var query = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-
+	function searchTickets(value, from, size) {
 	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get('/search/tickets/' + query).then(function (response) {
-	    console.log(response.data);
-	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(response.data.hits.hits));
+	  return _axios2.default.get('/search/tickets/' + value + '?from=' + from + '&size=' + size).then(function (response) {
+	    var tickets = response.data.hits;
+	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(tickets));
 	  });
 	}
 
@@ -44704,6 +44714,114 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getAccounts = getAccounts;
+	exports.searchAccounts = searchAccounts;
+	exports.deleteUser = deleteUser;
+	exports.getAccount = getAccount;
+
+	var _axios = __webpack_require__(252);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _store = __webpack_require__(190);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _connectionConfig = __webpack_require__(271);
+
+	var _connectionConfig2 = _interopRequireDefault(_connectionConfig);
+
+	var _accountActions = __webpack_require__(274);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Get all users
+	 */
+
+	function getAccounts() {
+	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+	  return _axios2.default.get("/accounts").then(function (response) {
+	    _store2.default.dispatch((0, _accountActions.getAccountsSuccess)(response.data.hits));
+	  });
+	}
+
+	/**
+	 * Search users
+	 */
+
+	function searchAccounts(value, from, size) {
+	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+	  return _axios2.default.get('/search/accounts/' + value + '?from=' + from + '&size=' + size).then(function (response) {
+	    var accounts = response.data.hits;
+	    _store2.default.dispatch((0, _accountActions.getAccountsSuccess)(accounts));
+	  });
+	}
+
+	/**
+	 * Delete a user
+	 */
+
+	function deleteUser(userId) {
+	  return _axios2.default.delete('http://localhost:3001/users/' + userId).then(function (response) {
+	    _store2.default.dispatch(deleteUserSuccess(userId));
+	    return response;
+	  });
+	}
+
+	/**
+	 * getProfile() is much more complex because it has to make
+	 * three XHR requests to get all the profile info.
+	 */
+
+	function getAccount(accountId) {
+	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+	  return _axios2.default.get("/accounts/" + accountId).then(function (response) {
+	    _store2.default.dispatch((0, _accountActions.getAccountSuccess)(response.data._source));
+	  });
+	}
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getAccountsSuccess = getAccountsSuccess;
+	exports.getAccountSuccess = getAccountSuccess;
+
+	var _actionTypes = __webpack_require__(193);
+
+	var types = _interopRequireWildcard(_actionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getAccountsSuccess(accounts) {
+	  return {
+	    type: types.GET_ACCOUNTS_SUCCESS,
+	    accounts: accounts
+	  };
+	}
+
+	function getAccountSuccess(account) {
+	  return {
+	    type: types.GET_ACCOUNT_SUCCESS,
+	    account: account
+	  };
+	}
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	exports.loadSearchLayout = loadSearchLayout;
 
 	var _actionTypes = __webpack_require__(193);
@@ -44721,7 +44839,7 @@
 	}
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44760,7 +44878,7 @@
 	});
 
 /***/ },
-/* 275 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44785,11 +44903,11 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _TicketList = __webpack_require__(276);
+	var _TicketList = __webpack_require__(278);
 
 	var _TicketList2 = _interopRequireDefault(_TicketList);
 
-	var _searchLayoutActions = __webpack_require__(273);
+	var _searchLayoutActions = __webpack_require__(275);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -44835,7 +44953,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(TicketListContainer);
 
 /***/ },
-/* 276 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44879,7 +44997,7 @@
 	      var ticketsolution = _ticket$_source.ticketsolution;
 	      var account = _ticket$_source.account;
 
-
+	      if (!subject) var Subject = ticketid;else var Subject = subject;
 	      return _react2.default.createElement(
 	        "div",
 	        { key: ticketid, className: "ticketListContainer" },
@@ -44892,7 +45010,7 @@
 	            _react2.default.createElement(
 	              _reactRouter.Link,
 	              { to: "tickets/" + ticketid },
-	              subject
+	              Subject
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -44920,7 +45038,7 @@
 	exports.default = TicketList;
 
 /***/ },
-/* 277 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44941,7 +45059,7 @@
 
 	var ticketApi = _interopRequireWildcard(_ticketApi);
 
-	var _accountApi = __webpack_require__(278);
+	var _accountApi = __webpack_require__(273);
 
 	var accountApi = _interopRequireWildcard(_accountApi);
 
@@ -45025,116 +45143,6 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(TicketDetailContainer);
 
 /***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.getAccounts = getAccounts;
-	exports.searchAccounts = searchAccounts;
-	exports.deleteUser = deleteUser;
-	exports.getAccount = getAccount;
-
-	var _axios = __webpack_require__(252);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	var _store = __webpack_require__(190);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _connectionConfig = __webpack_require__(271);
-
-	var _connectionConfig2 = _interopRequireDefault(_connectionConfig);
-
-	var _accountActions = __webpack_require__(279);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Get all users
-	 */
-
-	function getAccounts() {
-	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get("/accounts").then(function (response) {
-	    console.log(response.data);
-	    _store2.default.dispatch((0, _accountActions.getAccountsSuccess)(response.data.hits.hits));
-	  });
-	}
-
-	/**
-	 * Search users
-	 */
-
-	function searchAccounts() {
-	  var query = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-
-	  return _axios2.default.get('http://localhost:3001/users?q=' + query).then(function (response) {
-	    _store2.default.dispatch(getTicketsSuccess(response.data));
-	    return response;
-	  });
-	}
-
-	/**
-	 * Delete a user
-	 */
-
-	function deleteUser(userId) {
-	  return _axios2.default.delete('http://localhost:3001/users/' + userId).then(function (response) {
-	    _store2.default.dispatch(deleteUserSuccess(userId));
-	    return response;
-	  });
-	}
-
-	/**
-	 * getProfile() is much more complex because it has to make
-	 * three XHR requests to get all the profile info.
-	 */
-
-	function getAccount(accountId) {
-	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get("/accounts/" + accountId).then(function (response) {
-	    _store2.default.dispatch((0, _accountActions.getAccountSuccess)(response.data._source));
-	  });
-	}
-
-/***/ },
-/* 279 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.getAccountsSuccess = getAccountsSuccess;
-	exports.getAccountSuccess = getAccountSuccess;
-
-	var _actionTypes = __webpack_require__(193);
-
-	var types = _interopRequireWildcard(_actionTypes);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function getAccountsSuccess(accounts) {
-	  return {
-	    type: types.GET_ACCOUNTS_SUCCESS,
-	    accounts: accounts
-	  };
-	}
-
-	function getAccountSuccess(account) {
-	  return {
-	    type: types.GET_ACCOUNT_SUCCESS,
-	    account: account
-	  };
-	}
-
-/***/ },
 /* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -45183,6 +45191,7 @@
 
 	      var url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + ticketid;
 	      var d = Date(createdate);
+	      console.log(this.props.ticket);
 
 	      return _react2.default.createElement(
 	        "div",
@@ -45383,7 +45392,7 @@
 
 	var _reactRedux = __webpack_require__(168);
 
-	var _accountApi = __webpack_require__(278);
+	var _accountApi = __webpack_require__(273);
 
 	var accountApi = _interopRequireWildcard(_accountApi);
 
@@ -45395,7 +45404,7 @@
 
 	var _AccountList2 = _interopRequireDefault(_AccountList);
 
-	var _searchLayoutActions = __webpack_require__(273);
+	var _searchLayoutActions = __webpack_require__(275);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -45515,7 +45524,7 @@
 	      return _react2.default.createElement(
 	        "div",
 	        null,
-	        this.props.accounts.map(this.createListItem)
+	        this.props.accounts.hits.map(this.createListItem)
 	      );
 	    }
 	  }]);
@@ -45547,7 +45556,7 @@
 
 	var ticketApi = _interopRequireWildcard(_ticketApi);
 
-	var _accountApi = __webpack_require__(278);
+	var _accountApi = __webpack_require__(273);
 
 	var accountApi = _interopRequireWildcard(_accountApi);
 

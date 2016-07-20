@@ -21,7 +21,7 @@ export default class AccountList extends React.Component{
   render(){
     return(
       <div>
-        {this.props.accounts.map(this.createListItem)}
+        {this.props.accounts.hits.map(this.createListItem)}
       </div>
     )
   }
