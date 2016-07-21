@@ -7,7 +7,7 @@ import { loadSearchLayout } from '../../actions/search-layout-actions';
 
 class AccountListContainer extends React.Component{
   componentDidMount(){
-    accountApi.getAccounts();
+    accountApi.getAccounts(0, 40);
     store.dispatch(loadSearchLayout('accounts', 'Account Results'));
   }
 

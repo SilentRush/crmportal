@@ -7,9 +7,9 @@ import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
  * Get all users
  */
 
-export function getTickets() {
+export function getTickets(from,size) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get("/tickets")
+  return axios.get("/tickets?from=" + from + "&size=" + size)
     .then(function(response){
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));

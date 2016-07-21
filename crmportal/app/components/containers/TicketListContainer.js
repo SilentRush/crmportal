@@ -7,7 +7,7 @@ import { loadSearchLayout } from '../../actions/search-layout-actions';
 
 class TicketListContainer extends React.Component{
   componentDidMount(){
-    ticketApi.getTickets();
+    ticketApi.getTickets(0, 40);
     store.dispatch(loadSearchLayout('tickets', 'Ticket Results'));
   }
 

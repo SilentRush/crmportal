@@ -19,10 +19,13 @@ const SearchFormContainer = React.createClass({
       if(query)
         ticketApi.searchTickets(query,0,40);
       else
-        ticketApi.getTickets();
+        ticketApi.getTickets(0, 40);
     }
     if (this.props.searchType === 'accounts') {
-      accountApi.searchAccounts(query,0,40);
+      if(query)
+        accountApi.searchAccounts(query,0,40);
+      else
+        accountApi.searchAccounts(0, 40);
     }
   },
 

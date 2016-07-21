@@ -4,7 +4,7 @@ require "json"
 
 class TicketsController < ApplicationController
   def index
-    url = "http://localhost:9200/xtivia/ticket/_search/?size=100&sort=slxupdatedate:desc"
+    url = "http://localhost:9200/xtivia/ticket/_search/?size=" + params["size"] + "&from=" + params["from"] + "&sort=slxupdatedate:desc"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)

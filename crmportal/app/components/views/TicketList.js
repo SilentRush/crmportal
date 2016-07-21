@@ -12,14 +12,10 @@ export default class TicketList extends React.Component{
     let Slxupdatedate = new Date(slxupdatedate);
     let Updatedate = new Date(updatedate);
 
-    if(!subject)
-      var Subject = ticketid;
-    else
-      var Subject = subject;
     return (
       <div key={ticketid} className="ticketListContainer">
         <div className="ticketListItem">
-          <div><Link to={"tickets/" +ticketid}>{Subject}</Link></div>
+          <div><Link to={"tickets/" +ticketid}>{ticketid} - {subject}</Link></div>
           <div>{account.accountname}</div>
           <div>Create Date: {Slxcreatedate.toLocaleString()} - Update Date: {Slxupdatedate.toLocaleString()}</div>
         </div>

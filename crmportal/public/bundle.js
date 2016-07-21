@@ -43341,10 +43341,10 @@
 	    var query = this.refs.child.getQuery();
 
 	    if (this.props.searchType === 'tickets') {
-	      if (query) ticketApi.searchTickets(query, 0, 40);else ticketApi.getTickets();
+	      if (query) ticketApi.searchTickets(query, 0, 40);else ticketApi.getTickets(0, 40);
 	    }
 	    if (this.props.searchType === 'accounts') {
-	      accountApi.searchAccounts(query, 0, 40);
+	      if (query) accountApi.searchAccounts(query, 0, 40);else accountApi.searchAccounts(0, 40);
 	    }
 	  },
 
@@ -43391,9 +43391,9 @@
 	 * Get all users
 	 */
 
-	function getTickets() {
+	function getTickets(from, size) {
 	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get("/tickets").then(function (response) {
+	  return _axios2.default.get("/tickets?from=" + from + "&size=" + size).then(function (response) {
 	    var tickets = response.data.hits;
 	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(tickets));
 	  });
@@ -44749,9 +44749,9 @@
 	 * Get all users
 	 */
 
-	function getAccounts() {
+	function getAccounts(from, size) {
 	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get("/accounts").then(function (response) {
+	  return _axios2.default.get("/accounts?from=" + from + "&size=" + size).then(function (response) {
 	    _store2.default.dispatch((0, _accountActions.getAccountsSuccess)(response.data.hits));
 	  });
 	}
@@ -44952,7 +44952,7 @@
 	  _createClass(TicketListContainer, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      ticketApi.getTickets();
+	      ticketApi.getTickets(0, 40);
 	      _store2.default.dispatch((0, _searchLayoutActions.loadSearchLayout)('tickets', 'Ticket Results'));
 	    }
 	  }, {
@@ -45027,7 +45027,6 @@
 	      var Slxupdatedate = new Date(slxupdatedate);
 	      var Updatedate = new Date(updatedate);
 
-	      if (!subject) var Subject = ticketid;else var Subject = subject;
 	      return _react2.default.createElement(
 	        "div",
 	        { key: ticketid, className: "ticketListContainer" },
@@ -45040,7 +45039,9 @@
 	            _react2.default.createElement(
 	              _reactRouter.Link,
 	              { to: "tickets/" + ticketid },
-	              Subject
+	              ticketid,
+	              " - ",
+	              subject
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -45501,7 +45502,7 @@
 	  _createClass(AccountListContainer, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      accountApi.getAccounts();
+	      accountApi.getAccounts(0, 40);
 	      _store2.default.dispatch((0, _searchLayoutActions.loadSearchLayout)('accounts', 'Account Results'));
 	    }
 	  }, {

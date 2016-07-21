@@ -7,9 +7,9 @@ import { getAccountsSuccess, getAccountSuccess } from '../actions/account-action
  * Get all users
  */
 
-export function getAccounts() {
+export function getAccounts(from,size) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get("/accounts")
+  return axios.get("/accounts?from=" + from + "&size=" + size)
     .then(function(response){
       store.dispatch(getAccountsSuccess(response.data.hits));
     });

@@ -4,7 +4,7 @@ require "json"
 
 class AccountsController < ApplicationController
   def index
-    url = "http://localhost:9200/xtivia/account/_search/?size=100&sort=slxupdatedate:desc"
+    url = "http://localhost:9200/xtivia/account/_search/?size=" + params["size"] + "&from=" + params["from"] + "&sort=accountname.raw:asc"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
