@@ -23,10 +23,20 @@ export function getTickets() {
 
 export function searchTickets(value,from,size) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get('/search/tickets/'+ value + '?from=' + from + '&size=' + size)
+  return axios({
+    method: 'post',
+    url: '/search/tickets',
+    data: {
+    "value":value,
+    "from":from,
+    "size":size
+  }})
     .then(response => {
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));
+    })
+    .catch(error => {
+      console.log(error);
     });
 }
 
@@ -35,6 +45,7 @@ export function getAccountTickets(accountid,from,size) {
   return axios.get('/search/tickets/account/'+ accountid + '?from=' + from + '&size=' + size)
     .then(response => {
       let tickets = response.data.hits;
+      console.log(tickets);
       store.dispatch(getTicketsSuccess(tickets));
     });
 }

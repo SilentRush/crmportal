@@ -4,7 +4,7 @@ require "json"
 
 class AccountsController < ApplicationController
   def index
-    url = "http://localhost:9200/xtivia/account/_search/?size=100"
+    url = "http://localhost:9200/xtivia/account/_search/?size=100&sort=slxupdatedate:desc"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -57,30 +57,14 @@ class AccountsController < ApplicationController
               "match":{
                 "notes" => "#{params["value"]}"
               }
-            },
-            {
-              "match":{
-                "address.streetaddress" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "address.state" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "address.zip" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "address.city" => "#{params["value"]}"
-              }
             }
           ]
         }
-      }
+      },
+      "sort":[
+        {"slxupdatedate" => {"order"=>"desc"}},
+        "_score"
+      ],
     }
 
     if(!params["size"].nil?)

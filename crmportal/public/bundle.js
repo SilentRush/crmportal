@@ -43341,7 +43341,7 @@
 	    var query = this.refs.child.getQuery();
 
 	    if (this.props.searchType === 'tickets') {
-	      ticketApi.searchTickets(query, 0, 40);
+	      if (query) ticketApi.searchTickets(query, 0, 40);else ticketApi.getTickets();
 	    }
 	    if (this.props.searchType === 'accounts') {
 	      accountApi.searchAccounts(query, 0, 40);
@@ -43405,9 +43405,18 @@
 
 	function searchTickets(value, from, size) {
 	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get('/search/tickets/' + value + '?from=' + from + '&size=' + size).then(function (response) {
+	  return (0, _axios2.default)({
+	    method: 'post',
+	    url: '/search/tickets',
+	    data: {
+	      "value": value,
+	      "from": from,
+	      "size": size
+	    } }).then(function (response) {
 	    var tickets = response.data.hits;
 	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(tickets));
+	  }).catch(function (error) {
+	    console.log(error);
 	  });
 	}
 
@@ -43415,6 +43424,7 @@
 	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
 	  return _axios2.default.get('/search/tickets/account/' + accountid + '?from=' + from + '&size=' + size).then(function (response) {
 	    var tickets = response.data.hits;
+	    console.log(tickets);
 	    _store2.default.dispatch((0, _ticketActions.getTicketsSuccess)(tickets));
 	  });
 	}
@@ -44752,7 +44762,14 @@
 
 	function searchAccounts(value, from, size) {
 	  _axios2.default.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-	  return _axios2.default.get('/search/accounts/' + value + '?from=' + from + '&size=' + size).then(function (response) {
+	  return (0, _axios2.default)({
+	    method: 'post',
+	    url: '/search/accounts',
+	    data: {
+	      "value": value,
+	      "from": from,
+	      "size": size
+	    } }).then(function (response) {
 	    var accounts = response.data.hits;
 	    _store2.default.dispatch((0, _accountActions.getAccountsSuccess)(accounts));
 	  });
@@ -44866,11 +44883,15 @@
 	    return _react2.default.createElement(
 	      "form",
 	      { onSubmit: this.props.search, className: "search" },
-	      _react2.default.createElement("input", { type: "text", ref: "search", placeholder: "Search" }),
 	      _react2.default.createElement(
-	        "button",
-	        null,
-	        "Search"
+	        "div",
+	        { className: "input-group" },
+	        _react2.default.createElement("input", { type: "text", className: "form-control", ref: "search", placeholder: "Search" }),
+	        _react2.default.createElement(
+	          "span",
+	          { className: "input-group-btn" },
+	          _react2.default.createElement("input", { type: "submit", className: "btn btn-default", value: "Search" })
+	        )
 	      )
 	    );
 	  }
@@ -44996,6 +45017,15 @@
 	      var ticketproblem = _ticket$_source.ticketproblem;
 	      var ticketsolution = _ticket$_source.ticketsolution;
 	      var account = _ticket$_source.account;
+	      var slxcreatedate = _ticket$_source.slxcreatedate;
+	      var createdate = _ticket$_source.createdate;
+	      var slxupdatedate = _ticket$_source.slxupdatedate;
+	      var updatedate = _ticket$_source.updatedate;
+
+	      var Slxcreatedate = new Date(slxcreatedate);
+	      var Createdate = new Date(createdate);
+	      var Slxupdatedate = new Date(slxupdatedate);
+	      var Updatedate = new Date(updatedate);
 
 	      if (!subject) var Subject = ticketid;else var Subject = subject;
 	      return _react2.default.createElement(
@@ -45017,6 +45047,14 @@
 	            "div",
 	            null,
 	            account.accountname
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            null,
+	            "Create Date: ",
+	            Slxcreatedate.toLocaleString(),
+	            " - Update Date: ",
+	            Slxupdatedate.toLocaleString()
 	          )
 	        )
 	      );
@@ -45183,15 +45221,20 @@
 	      var _props$ticket = this.props.ticket;
 	      var subject = _props$ticket.subject;
 	      var ticketid = _props$ticket.ticketid;
+	      var slxcreatedate = _props$ticket.slxcreatedate;
 	      var createdate = _props$ticket.createdate;
+	      var slxupdatedate = _props$ticket.slxupdatedate;
+	      var updatedate = _props$ticket.updatedate;
 	      var ticketproblem = _props$ticket.ticketproblem;
 	      var ticketsolution = _props$ticket.ticketsolution;
 	      var account = _props$ticket.account;
 	      var assignedto = _props$ticket.assignedto;
 
 	      var url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + ticketid;
-	      var d = Date(createdate);
-	      console.log(this.props.ticket);
+	      var Slxcreatedate = new Date(slxcreatedate);
+	      var Createdate = new Date(createdate);
+	      var Slxupdatedate = new Date(slxupdatedate);
+	      var Updatedate = new Date(updatedate);
 
 	      return _react2.default.createElement(
 	        "div",
@@ -45207,12 +45250,42 @@
 	          _react2.default.createElement(
 	            "label",
 	            null,
-	            "Create Date:"
+	            "Create on:"
 	          ),
 	          _react2.default.createElement(
 	            "p",
 	            null,
-	            d
+	            Createdate.toLocaleString()
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Updated on:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            Updatedate.toLocaleString()
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Saleslogix Create Date:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            Slxcreatedate.toLocaleString()
+	          ),
+	          _react2.default.createElement(
+	            "label",
+	            null,
+	            "Saleslogix Update Date:"
+	          ),
+	          _react2.default.createElement(
+	            "p",
+	            null,
+	            Slxupdatedate.toLocaleString()
 	          ),
 	          _react2.default.createElement(
 	            "label",

@@ -6,7 +6,12 @@ export default class TicketList extends React.Component{
     super();
   }
   createListItem(ticket){
-    const { subject, ticketid, ticketproblem, ticketsolution, account } = ticket._source;
+    const { subject, ticketid, ticketproblem, ticketsolution, account,slxcreatedate, createdate, slxupdatedate, updatedate } = ticket._source;
+    let Slxcreatedate = new Date(slxcreatedate);
+    let Createdate = new Date(createdate);
+    let Slxupdatedate = new Date(slxupdatedate);
+    let Updatedate = new Date(updatedate);
+
     if(!subject)
       var Subject = ticketid;
     else
@@ -16,6 +21,7 @@ export default class TicketList extends React.Component{
         <div className="ticketListItem">
           <div><Link to={"tickets/" +ticketid}>{Subject}</Link></div>
           <div>{account.accountname}</div>
+          <div>Create Date: {Slxcreatedate.toLocaleString()} - Update Date: {Slxupdatedate.toLocaleString()}</div>
         </div>
       </div>
     )

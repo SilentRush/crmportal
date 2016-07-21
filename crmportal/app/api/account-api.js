@@ -22,7 +22,14 @@ export function getAccounts() {
 
 export function searchAccounts(value,from,size) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get('/search/accounts/'+ value + '?from=' + from + '&size=' + size)
+  return axios({
+      method: 'post',
+      url: '/search/accounts',
+      data: {
+      "value":value,
+      "from":from,
+      "size":size
+    }})
     .then(response => {
       let accounts = response.data.hits;
       store.dispatch(getAccountsSuccess(accounts));

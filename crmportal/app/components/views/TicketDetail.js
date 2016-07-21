@@ -6,16 +6,21 @@ export default class TicketDetail extends React.Component{
     super();
   }
   render(){
-    const { subject, ticketid, createdate, ticketproblem, ticketsolution, account, assignedto } = this.props.ticket;
+    const { subject, ticketid, slxcreatedate, createdate, slxupdatedate, updatedate, ticketproblem, ticketsolution, account, assignedto } = this.props.ticket;
     const url = "https://slxweb.sssworld.com/SlxClient/Ticket.aspx?entityid=" + ticketid;
-    let d = Date(createdate);
-    console.log(this.props.ticket);
+    let Slxcreatedate = new Date(slxcreatedate);
+    let Createdate = new Date(createdate);
+    let Slxupdatedate = new Date(slxupdatedate);
+    let Updatedate = new Date(updatedate);
 
     return (
       <div className="ticketDetailContainer card-shadow">
         <div className="ticketDetailHeader">{subject}</div>
         <div className="ticketDetail">
-          <label>Create Date:</label><p>{d}</p>
+          <label>Create on:</label><p>{Createdate.toLocaleString()}</p>
+          <label>Updated on:</label><p>{Updatedate.toLocaleString()}</p>
+          <label>Saleslogix Create Date:</label><p>{Slxcreatedate.toLocaleString()}</p>
+          <label>Saleslogix Update Date:</label><p>{Slxupdatedate.toLocaleString()}</p>
           <label>Assigned To:</label><p>{assignedto.username}</p>
           <a href={url} target="blank">Infor Ticket Link:  {ticketid}</a><br />
           <label>Description:</label><p>{ticketproblem}</p>
