@@ -1,103 +1,291 @@
-.ticketDetailContainer, .AccountMiniDetailContainer{
-  border-radius: 4px!important;
-  background: white;
+.ticketDetailContainer, .AccountMiniDetailContainer {
+    border-radius: 4px!important;
+    background: white;
 }
-.ticketDetailContainer > .ticketDetail, .AccountMiniDetailContainer > .AccountDetail{
-  background: #ffffff;
-  padding: 16px;
+.ticketDetailContainer> .ticketDetail, .AccountMiniDetailContainer> .AccountDetail {
+    background: #ffffff;
+    padding: 16px;
 }
-.ticketDetailContainer > .ticketDetailHeader{
-  border-radius: 4px 4px 0px 0px;
-  border-bottom: 1px solid #dddddd;
-  padding: 5px 16px;
-  color:white;
-  background: #7d97a5 !important;
-  font-size: 1.3em;
-  font-family: Tahoma, Geneva, sans-serif;
-  font-variant: small-caps;
+.ticketDetailContainer> .ticketDetailHeader {
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 16px;
+    color: white;
+    background: #7d97a5 !important;
+    font-size: 1.3em;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-variant: small-caps;
 }
-#app{
-  font-family: Tahoma, Geneva, sans-serif;
-  font-size: 1em;
+#app {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 1em;
 }
-
-.ticketListContainer{
+.ticketListContainer {}
+.ticketListContainer> .ticketListItem {
+    padding: 5px 0px;
 }
-.ticketListContainer > .ticketListItem {
-  padding:5px 0px;
+.ticketListMini {
+    padding: 5px 10px;
 }
-
-.ticketListMini{
-  padding: 5px 10px;
+.ticketListMini> a {}
+.card-shadow {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)!important;
 }
-
-.ticketListMini > a{
+body {
+    background: #f5f7f8 !important;
 }
-
-.card-shadow{
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
-}
-
-body{
-  background: #f5f7f8 !important;
-}
-
 .navbar-default {
-  background-color: #2976a0 !important;
-
+    background-color: #2976a0 !important;
 }
-
 .navbar-default .navbar-brand {
-  color: white !important;
+    color: white !important;
 }
-
 .navbar-default .navbar-nav>li>a:hover {
-  color: #64d3ff !important;
+    color: #64d3ff !important;
 }
-
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
     background-color: #2976a0 !important;
     color: white;
     border-bottom: 5px solid white;
 }
-
 .navbar-default .navbar-nav>li>a {
-  color: white !important;
+    color: white !important;
 }
-
-.AccountMiniDetail-Header{
-  text-align: center!important;
-  padding: 10px 0px 10px 0px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  font-weight: bold;
+.AccountMiniDetail-Header {
+    text-align: center!important;
+    padding: 10px 0px 10px 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: bold;
 }
-
-.AccountMiniDetailContainer > .AccountMiniDetail-Img {
+.AccountMiniDetailContainer> .AccountMiniDetail-Img {
     text-align: center!important;
 }
-.floatRight{
-  float: right;
+.floatRight {
+    float: right;
+}
+.DivCursor {
+    cursor: pointer;
+}
+.NotesTab {
+    color: white;
+    background: #7d97a5;
+    padding: 5px 10px;
+}
+.NotesTab:hover {
+    background: #3aa6e0;
 }
 
-.DivCursor{
-  cursor: pointer;
+.uiContextualLayerPositioner {
+    height: 0;
+    position: absolute;
+    z-index: 200;
 }
 
-.NotesTab{
-  color:white;
-  background:#7d97a5;
-  padding: 5px 10px;
+@media (min-width: 768px) {
+    .navbar-nav>li>a {
+        padding-top: 15px;
+        padding-bottom: 10px;
+    }
+}
+pre {
+  border: 0;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white;
+}
+.RichEditor-root {
+    background: #fff;
+    border: 1px solid #ddd;
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    padding: 15px;
+}
+.RichEditor-editor {
+    border-top: 1px solid #ddd;
+    cursor: text;
+    font-size: 16px;
+    margin-top: 10px;
+}
+.RichEditor-editor .public-DraftEditorPlaceholder-root, .RichEditor-editor .public-DraftEditor-content {
+    margin: 0 -15px -15px;
+    padding: 15px;
+}
+.RichEditor-editor .public-DraftEditor-content {
+    min-height: 100px;
+}
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+    display: none;
+}
+.RichEditor-editor .RichEditor-blockquote {
+    border-left: 5px solid #eee;
+    color: #666;
+    font-family: 'Hoefler Text', 'Georgia', serif;
+    font-style: italic;
+    margin: 16px 0;
+    padding: 10px 20px;
+}
+.RichEditor-editor .public-DraftStyleDefault-pre {
+    background-color: rgba(53, 53, 53, 0.05);
+    font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+    font-size: 16px;
+    padding: 20px;
+}
+.RichEditor-controls {
+    font-family: 'Helvetica', sans-serif;
+    font-size: 14px;
+    margin-bottom: 5px;
+    user-select: none;
+}
+.RichEditor-styleButton {
+    color: #999;
+    cursor: pointer;
+    margin-right: 16px;
+    padding: 2px 0;
+    display: inline-block;
+}
+.RichEditor-activeButton {
+    color: #5890ff;
 }
 
-.NotesTab:hover{
-  background: #3aa6e0;
+pre{
+  margin: 0px;
 }
 
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
 
-@media (min-width: 768px){
-  .navbar-nav>li>a {
-      padding-top: 15px;
-      padding-bottom: 10px;
-  }
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	background: none;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+	code[class*="language-"],
+	pre[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f2f0;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #999;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #07a;
+}
+
+.token.function {
+	color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e90;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
 }

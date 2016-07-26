@@ -1,9 +1,8 @@
 import React from "react";
 import { connect } from 'react-redux';
-import * as ticketApi from '../../api/ticket-api';
-import * as accountApi from '../../api/account-api';
+import * as ticketApi from '../../../../api/ticket-api';
+import * as accountApi from '../../../../api/account-api';
 import TicketDetail from "../views/TicketDetail";
-import AccountMiniDetail from "../views/AccountMiniDetail";
 import {Entity} from 'draft-js';
 
 class TicketDetailContainer extends React.Component{
@@ -15,9 +14,13 @@ class TicketDetailContainer extends React.Component{
 
   componentDidMount(){
     var data;
+    if(this.props.block)
+      data = Entity.get(this.props.block.getEntityAt(0)).getData();
     let ticketId;
     if(this.props.params)
       ticketId = this.props.params.ticketid;
+    if(data)
+      ticketId = data.ticketid;
     ticketApi.getTicket(ticketId).then(
       () => {
         accountApi.getAccount(this.props.ticket.account.accountid);
@@ -36,12 +39,7 @@ class TicketDetailContainer extends React.Component{
   render(){
     return (
       <div className="row">
-        <div className="col-sm-4 col-xs-12 col-md-4">
-          <AccountMiniDetail account={this.props.account} clickShowNotes={this.clickShowNotes} showNotes={this.state.showNotes} />
-        </div>
-        <div className="col-sm-8 col-xs-12 col-md-8">
           <TicketDetail ticket={this.props.ticket} />
-        </div>
       </div>
     )
   }
