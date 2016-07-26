@@ -63579,8 +63579,9 @@
 	    fontSize: 16,
 	    padding: 2
 	  },
-	  RED: {
-	    color: 'red'
+	  HIGHLIGHT: {
+	    backgroundColor: 'rgb(133, 251, 255)',
+	    color: 'black'
 	  }
 	};
 
@@ -63650,7 +63651,7 @@
 	  );
 	};
 
-	var INLINE_STYLES = [{ label: 'Bold', style: 'BOLD' }, { label: 'Italic', style: 'ITALIC' }, { label: 'Underline', style: 'UNDERLINE' }, { label: 'Monospace', style: 'CODE' }, { label: 'Red', style: 'RED' }];
+	var INLINE_STYLES = [{ label: 'Bold', style: 'BOLD' }, { label: 'Italic', style: 'ITALIC' }, { label: 'Underline', style: 'UNDERLINE' }, { label: 'Monospace', style: 'CODE' }, { label: 'Highlight', style: 'HIGHLIGHT' }];
 
 	var InlineStyleControls = function InlineStyleControls(props) {
 	  var currentStyle = props.editorState.getCurrentInlineStyle();

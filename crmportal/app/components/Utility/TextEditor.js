@@ -136,8 +136,9 @@ const styleMap = {
     fontSize: 16,
     padding: 2,
   },
-  RED: {
-    color: 'red'
+  HIGHLIGHT: {
+    backgroundColor: 'rgb(133, 251, 255)',
+    color: 'black'
   }
 };
 
@@ -212,7 +213,7 @@ var INLINE_STYLES = [
   {label: 'Italic', style: 'ITALIC'},
   {label: 'Underline', style: 'UNDERLINE'},
   {label: 'Monospace', style: 'CODE'},
-  {label: 'Red', style:'RED'}
+  {label: 'Highlight', style:'HIGHLIGHT'}
 ];
 
 const InlineStyleControls = (props) => {
