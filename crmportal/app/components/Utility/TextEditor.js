@@ -1,16 +1,17 @@
-import {Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw, Entity,ContentState} from 'draft-js';
+import {Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw, Entity,ContentState, AtomicBlockUtils} from 'draft-js';
 import React from 'react';
 import PrismDecorator from 'draft-js-prism';
 import Immutable from 'immutable';
 import insertMediaBlock from './src/insertMediaBlock';
 import TicketDetailContainer from './components/containers/TicketDetailContainer';
+import TicketInputContainer from './components/containers/TicketInputContainer';
 
 export default class TextEditor extends React.Component {
   constructor(props) {
     super(props);
 
     const customBlockRenderMap = Immutable.Map({
-      'custom': {
+      'ticketDetails': {
         element: 'div',
       }
     });
@@ -23,7 +24,7 @@ export default class TextEditor extends React.Component {
 
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
-    this.custom = () => this._custom();
+    this.ticketDetails = (ticketid) => this._ticketDetails(ticketid);
     this.color = (e) => this._color(e);
     this.colorClick = (e) => this._color(e);
 
@@ -31,17 +32,22 @@ export default class TextEditor extends React.Component {
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
 
-    //this.state.editorState = EditorState.createWithContent(convertFromRaw({"entityMap":{"0":{"type":"CUSTOM","mutability":"IMMUTABLE","data":{"ticketid":"tVTMFA0010ST"}}},"blocks":[{"key":"erp6t","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[]},{"key":"2l1gp","text":" ","type":"custom","depth":0,"inlineStyleRanges":[],"entityRanges":[{"offset":0,"length":1,"key":0}]},{"key":"d69et","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[]}]}));
+    if(this.props.content)
+      this.state.editorState = EditorState.createWithContent(convertFromRaw(this.props.content), decorator);
   }
 
-  _custom(){
+  _ticketDetails(ticketid){
     var entityKey = Entity.create(
-      'CUSTOM',
+      'ticketDetails',
       'IMMUTABLE',
-      {ticketid:'tVTMFA0010ST'}
+      {ticketid:ticketid}
     );
-    let {editorState} = insertMediaBlock(this.state.editorState, 'custom', entityKey);
-    this.setState({editorState: editorState });
+    //let {editorState} = insertMediaBlock(this.state.editorState, 'custom', entityKey);
+    this.setState({editorState: AtomicBlockUtils.insertAtomicBlock(
+              this.state.editorState,
+              entityKey,
+              ' '
+            ) });
   }
 
   _handleKeyCommand(command) {
@@ -75,9 +81,9 @@ export default class TextEditor extends React.Component {
   myBlockRenderer(contentBlock) {
     const type = contentBlock.getType();
 
-    if (type === 'custom') {
+    if (type === 'atomic') {
       return {
-        component: TicketDetailContainer,
+        component: atomicHandler,
         editable: false,
       };
     }
@@ -97,8 +103,9 @@ export default class TextEditor extends React.Component {
     }
 
     const raw = convertToRaw(this.state.editorState.getCurrentContent());
-
-    return (
+    var textEditor;
+    if(this.props.isEdit){
+      textEditor =
       <div className="RichEditor-root">
         <BlockStyleControls
           editorState={editorState}
@@ -108,7 +115,9 @@ export default class TextEditor extends React.Component {
           editorState={editorState}
           onToggle={this.toggleInlineStyle}
         />
-        <button onClick={this.custom}>test</button>
+        <CustomBlockControls
+          ticketDetails = {this.ticketDetails}
+        />
         <div className={className} onClick={this.focus}>
           <Editor
             blockRenderMap={this.state.blockRenderMap}
@@ -122,11 +131,53 @@ export default class TextEditor extends React.Component {
             blockRendererFn={this.myBlockRenderer}
           />
         </div>
-        <div>{JSON.stringify(raw)}</div>
+        <div>
+          {JSON.stringify(raw)}
+        </div>
+      </div>;
+    }
+    else{
+      textEditor =
+      <div className="RichEditor-root">
+        <div onClick={this.focus}>
+          <Editor
+            blockRenderMap={this.state.blockRenderMap}
+            blockStyleFn={getBlockStyle}
+            customStyleMap={styleMap}
+            editorState={editorState}
+            handleKeyCommand={this.handleKeyCommand}
+            onChange={this.onChange}
+            ref="editor"
+            spellCheck={false}
+            blockRendererFn={this.myBlockRenderer}
+            readOnly={true}
+          />
+        </div>
+      </div>;
+    }
+
+    return (
+      <div>
+        {textEditor}
       </div>
     );
   }
 }
+
+const atomicHandler = (props) => {
+   const entity = Entity.get(props.block.getEntityAt(0));
+   const {ticketid} = entity.getData();
+   const type = entity.getType();
+
+   let component;
+   if (type === 'ticketDetails') {
+     component = <TicketDetailContainer ticketid={ticketid} />;
+   } else if (type === '') {
+   //  component = <Image src={src} />;
+   }
+
+   return component;
+ }
 
 // Custom overrides for "code" style.
 const styleMap = {
@@ -229,6 +280,14 @@ const InlineStyleControls = (props) => {
           style={type.style}
         />
       )}
+    </div>
+  );
+};
+
+const CustomBlockControls = (props) => {
+  return (
+    <div className="RichEditor-controls">
+      <TicketInputContainer ticketDetails={props.ticketDetails} />
     </div>
   );
 };

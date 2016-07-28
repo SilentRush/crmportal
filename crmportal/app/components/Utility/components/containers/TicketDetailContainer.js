@@ -19,8 +19,8 @@ class TicketDetailContainer extends React.Component{
     let ticketId;
     if(this.props.params)
       ticketId = this.props.params.ticketid;
-    if(data)
-      ticketId = data.ticketid;
+    if(this.props.ticketid)
+      ticketId = this.props.ticketid;
     ticketApi.getTicket(ticketId).then(
       () => {
         accountApi.getAccount(this.props.ticket.account.accountid);
@@ -38,7 +38,7 @@ class TicketDetailContainer extends React.Component{
 
   render(){
     return (
-      <div className="row">
+      <div>
           <TicketDetail ticket={this.props.ticket} />
       </div>
     )
