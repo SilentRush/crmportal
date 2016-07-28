@@ -6,9 +6,10 @@ import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
 /**
  * Get all users
  */
+ const API_ROOT = 'http://api.twilkislinux.sssworld-local.com/';
 
 export function getTickets(from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  axios.defaults.baseURL = API_ROOT;
   return axios.get("/tickets?from=" + from + "&size=" + size)
     .then(function(response){
       let tickets = response.data.hits;
@@ -22,7 +23,7 @@ export function getTickets(from,size) {
  */
 
 export function searchTickets(value,from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
     url: '/search/tickets',
@@ -41,7 +42,7 @@ export function searchTickets(value,from,size) {
 }
 
 export function getAccountTickets(accountid,from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  axios.defaults.baseURL = API_ROOT;
   return axios.get('/search/tickets/account/'+ accountid + '?from=' + from + '&size=' + size)
     .then(response => {
       let tickets = response.data.hits;
@@ -68,7 +69,7 @@ export function deleteUser(userId) {
  */
 
 export function getTicket(ticketId) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
+  axios.defaults.baseURL = API_ROOT;
   return axios.get("/tickets/" + ticketId).then(function(response){
     store.dispatch(getTicketSuccess(response.data._source));
   });

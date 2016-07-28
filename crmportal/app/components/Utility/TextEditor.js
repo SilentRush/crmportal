@@ -1,4 +1,4 @@
-import {Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw, Entity,ContentState, AtomicBlockUtils} from 'draft-js';
+import {Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw, convertFromRaw, Entity,ContentState, AtomicBlockUtils, genKey} from 'draft-js';
 import React from 'react';
 import PrismDecorator from 'draft-js-prism';
 import Immutable from 'immutable';
@@ -16,14 +16,22 @@ export default class TextEditor extends React.Component {
       }
     });
 
-    var decorator = new PrismDecorator({defaultSyntax: 'javascript'});
+    this.decorator = new PrismDecorator({defaultSyntax: 'javascript'});
     this.state = {
       blockRenderMap: DefaultDraftBlockRenderMap.merge(customBlockRenderMap),
-      editorState: EditorState.createEmpty(decorator),
+      editorState: EditorState.createEmpty(this.decorator),
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
+    this.onChange = (editorState) => {
+      this.setState({editorState});
+    };
+
+    this.submitClick = () => {
+      this.props.submitComment(convertToRaw(this.state.editorState.getCurrentContent()));
+      this.setState({editorState: EditorState.createEmpty(this.decorator)});
+    }
+
     this.ticketDetails = (ticketid) => this._ticketDetails(ticketid);
     this.color = (e) => this._color(e);
     this.colorClick = (e) => this._color(e);
@@ -32,9 +40,19 @@ export default class TextEditor extends React.Component {
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
 
-    if(this.props.content)
-      this.state.editorState = EditorState.createWithContent(convertFromRaw(this.props.content), decorator);
+
+
   }
+
+  componentDidMount(){
+    if(this.props.content){
+      const content = convertFromRaw(this.props.content);
+      const editorState = EditorState.push(this.state.editorState, content);
+      this.setState({editorState: editorState});
+    }
+  }
+
+
 
   _ticketDetails(ticketid){
     var entityKey = Entity.create(
@@ -92,6 +110,7 @@ export default class TextEditor extends React.Component {
   render() {
     const {editorState} = this.state;
 
+
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
@@ -120,6 +139,7 @@ export default class TextEditor extends React.Component {
         />
         <div className={className} onClick={this.focus}>
           <Editor
+            key = {this.props.parKey}
             blockRenderMap={this.state.blockRenderMap}
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
@@ -131,6 +151,7 @@ export default class TextEditor extends React.Component {
             blockRendererFn={this.myBlockRenderer}
           />
         </div>
+        <input type="button" value="submit" className="btn btn-success" onClick={this.submitClick} />
         <div>
           {JSON.stringify(raw)}
         </div>

@@ -1,11 +1,17 @@
 import React from "react";
 import { connect } from 'react-redux';
+import * as commentApi from '../../api/comment-api';
+import store from '../../store';
 import CommentList from '../views/CommentList';
 
 class CommentListContainer extends React.Component{
   constructor(props){
     super(props);
-
+    console.log(this.props);
+  }
+  componentDidMount(){
+    if(this.props.entityid)
+      commentApi.getComments(this.props.type,this.props.entityid,0, 40);
   }
 
   render(){
@@ -17,6 +23,7 @@ class CommentListContainer extends React.Component{
 
 const mapStateToProps = function(store) {
   return {
+    comments: store.commentState.comments
   };
 };
 

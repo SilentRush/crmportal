@@ -1,28 +1,38 @@
 import React from "react";
-import TextEditor from "../Utility/TextEditor"
+import TextEditor from "../Utility/TextEditor";
+
 
 export default class Comment extends React.Component{
   constructor(props){
-    super();
+    super(props);
   }
   render(){
-    var textEditor;
-    if(this.props.isEdit){
+    var textEditor, commentDetails, comment;
+    if(this.props.comment){
+      const {createdate} = this.props.comment._source;
+      let Createdate = new Date(createdate);
       textEditor =
-      <span>
-        <TextEditor isEdit={this.props.isEdit} content={this.props.comment} />
-        <input type="button" value="submit" />
-      </span>;
+      <span><TextEditor isEdit={this.props.isEdit} content={this.props.comment._source.rawbody} submitComment={this.props.submitComment} /></span>;
+      commentDetails =
+      <span>Posted on: {Createdate.toLocaleString()}</span>
     }
     else{
-      textEditor = <TextEditor isEdit={this.props.isEdit} content={this.props.content} />;
+      textEditor = <span><TextEditor isEdit={this.props.isEdit} submitComment={this.props.submitComment} /></span>;
     }
 
+    if(this.props.showComment)
+      comment = textEditor;
 
     return (
-      <span>
-        {textEditor}
-      </span>
+      <div className="commentContainer">
+        <div className="commentHeader" onClick={this.props.toggleComment}>Comment</div>
+        <div className="editor">
+          {comment}
+        </div>
+        <div className="commentDetails">
+          {commentDetails}
+        </div>
+      </div>
     )
   }
 }

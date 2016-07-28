@@ -82,6 +82,25 @@ body {
     z-index: 200;
 }
 
+.commentContainer{
+  margin-bottom: .7em;
+  margin-bottom: .7em;
+  border: 1px solid #ddd;
+  background: white;
+}
+.commentHeader{
+  background: whitesmoke;
+  padding: 10px;
+}
+.commentDetails{
+  padding:10px;
+}
+.editor{
+  padding: 10px;
+  max-height: 700px;
+  overflow:auto;
+}
+
 @media (min-width: 768px) {
     .navbar-nav>li>a {
         padding-top: 15px;

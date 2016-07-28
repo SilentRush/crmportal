@@ -4,6 +4,8 @@ import * as ticketApi from '../../api/ticket-api';
 import * as accountApi from '../../api/account-api';
 import AccountDetail from "../views/AccountDetail";
 import TicketMiniList from "../views/TicketMiniList";
+import CommentListContainer from "./CommentListContainer";
+import CommentContainer from "./CommentContainer";
 
 class AccountDetailContainer extends React.Component{
   constructor(props){
@@ -23,7 +25,9 @@ class AccountDetailContainer extends React.Component{
 
   componentDidMount(){
       let accountId = this.props.params.accountid;
-      accountApi.getAccount(accountId);
+      accountApi.getAccount(accountId).then(()=>{
+        this.commentList = <CommentListContainer isEdit={false} entityid={this.props.account.accountid} type={"account"} />;
+      });
       ticketApi.getAccountTickets(accountId,0,15);
   }
 
@@ -39,11 +43,13 @@ class AccountDetailContainer extends React.Component{
   render(){
     return (
       <div className="row">
-        <div className="col-sm-4 col-xs-12 col-md-4">
+        <div className="col-sm-3 col-xs-12 col-md-3">
           <TicketMiniList tickets={this.props.tickets} currentIndex={this.state.currentIndex} clickPage={this.state.clickPage}  />
         </div>
-        <div className="col-sm-8 col-xs-12 col-md-8">
+        <div className="col-sm-9 col-xs-12 col-md-9">
           <AccountDetail account={this.props.account} />
+          {this.commentList}
+          <CommentContainer isEdit={true} entityid={this.props.account.accountid} type={"account"} />
         </div>
       </div>
     )
