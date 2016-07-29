@@ -49,21 +49,16 @@ class AccountsController < ApplicationController
         "bool" => {
           "should" => [
             {
-              "match":{
-                "accountname" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "notes" => "#{params["value"]}"
+              "wildcard":{
+                "accountname" => "*#{params["value"]}*"
               }
             }
           ]
         }
       },
       "sort":[
-        {"slxupdatedate" => {"order"=>"desc"}},
-        "_score"
+        "_score",
+        {"accountname.raw" => {"order"=>"asc"}}
       ],
     }
 

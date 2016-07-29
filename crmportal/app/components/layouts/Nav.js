@@ -1,9 +1,17 @@
 import React from "react";
-import {Link, IndexLink} from "react-router";
+import {Link, IndexLink, browserHistory} from "react-router";
 
 export default class Nav extends React.Component{
   constructor (){
     super();
+    this.logout = (e) => {
+      localStorage.removeItem("firstname");
+      localStorage.removeItem("lastname");
+      localStorage.removeItem("userid");
+      localStorage.removeItem("username");
+      localStorage.removeItem("token");
+      this.props.history.push('/login');
+    };
   }
   render(){
     const { location } = this.props;
@@ -30,6 +38,8 @@ export default class Nav extends React.Component{
                   <input type="text" className="form-control" placeholder="Search" />
                 </div>
                 <button type="submit" className="btn btn-default">Submit</button>
+                <span style={{padding:"5px",fontSize:".9em",color:"white"}}>Logged in: {localStorage.username}</span>
+                <button className="btn btn-danger" onClick={this.logout}>Logout</button>
               </form>
             </div>
           </div>

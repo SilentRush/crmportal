@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import instance from './connection-config'
 import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
 
 /**
  * Get all users
@@ -10,7 +11,15 @@ import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
 
 export function getTickets(from,size) {
   axios.defaults.baseURL = API_ROOT;
-  return axios.get("/tickets?from=" + from + "&size=" + size)
+  let params = {
+    "from":from,
+    "size":size,
+    "userid":localStorage.userid,
+    "token":localStorage.token
+  };
+  return axios({
+    method: 'get',
+    url: '/tickets' + encodeObjectToUriString(params)})
     .then(function(response){
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));
@@ -30,7 +39,9 @@ export function searchTickets(value,from,size) {
     data: {
     "value":value,
     "from":from,
-    "size":size
+    "size":size,
+    "userid":localStorage.userid,
+    "token":localStorage.token
   }})
     .then(response => {
       let tickets = response.data.hits;
@@ -43,8 +54,16 @@ export function searchTickets(value,from,size) {
 
 export function getAccountTickets(accountid,from,size) {
   axios.defaults.baseURL = API_ROOT;
-  return axios.get('/search/tickets/account/'+ accountid + '?from=' + from + '&size=' + size)
-    .then(response => {
+  let params = {
+    "from": from,
+    "size": size,
+    "token": localStorage.token,
+    "userid": localStorage.userid
+  };
+  return axios({
+    method: 'get',
+    url:'/search/tickets/account/' + accountid + encodeObjectToUriString(params)
+  }).then(response => {
       let tickets = response.data.hits;
       console.log(tickets);
       store.dispatch(getTicketsSuccess(tickets));
@@ -70,7 +89,14 @@ export function deleteUser(userId) {
 
 export function getTicket(ticketId) {
   axios.defaults.baseURL = API_ROOT;
-  return axios.get("/tickets/" + ticketId).then(function(response){
+  let params = {
+    "token": localStorage.token,
+    "userid": localStorage.userid
+  };
+  return axios({
+    method: 'get',
+    url:'/tickets/' + ticketId + encodeObjectToUriString(params)
+  }).then(function(response){
     store.dispatch(getTicketSuccess(response.data._source));
   });
 }

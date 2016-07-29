@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import instance from './connection-config'
 import { getAccountsSuccess, getAccountSuccess } from '../actions/account-actions';
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
 
 /**
  * Get all users
@@ -9,7 +10,16 @@ import { getAccountsSuccess, getAccountSuccess } from '../actions/account-action
 
 export function getAccounts(from,size) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get("/accounts?from=" + from + "&size=" + size)
+  let params = {
+    "from": from,
+    "size": size,
+    "token": localStorage.token,
+    "userid": localStorage.userid
+  };
+  return axios({
+    method: 'get',
+    url:'/accounts' + encodeObjectToUriString(params)
+  })
     .then(function(response){
       store.dispatch(getAccountsSuccess(response.data.hits));
     });
@@ -26,9 +36,11 @@ export function searchAccounts(value,from,size) {
       method: 'post',
       url: '/search/accounts',
       data: {
-      "value":value,
-      "from":from,
-      "size":size
+      "value":value.toString(),
+      "from":from.toString(),
+      "size":size.toString(),
+      "userid": localStorage.userid.toString(),
+      "token": localStorage.token.toString()
     }})
     .then(response => {
       let accounts = response.data.hits;
@@ -55,7 +67,14 @@ export function deleteUser(userId) {
 
 export function getAccount(accountId) {
   axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
-  return axios.get("/accounts/" + accountId).then(function(response){
+  let params = {
+    "token": localStorage.token,
+    "userid": localStorage.userid
+  };
+  return axios({
+    method: 'get',
+    url:'/accounts/' + accountId + encodeObjectToUriString(params)
+  }).then(function(response){
     store.dispatch(getAccountSuccess(response.data._source));
   });
 }

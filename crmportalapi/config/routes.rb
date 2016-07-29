@@ -4,6 +4,13 @@ Rails.application.routes.draw do
   resources :accounts
   resources :comments
 
+  post '/tickets', to: 'tickets#index'
+  post '/tickets/:ticketid', to: 'tickets#show'
+
+  post '/authenticateUser', to: 'users#authenticateUser';
+  delete '/logout', to: 'users#logout';
+  post '/user', to: 'users#create';
+
   post '/search/tickets', to: 'tickets#search'
   get '/search/tickets/account/:accountid', to: 'tickets#getAccountTickets'
 

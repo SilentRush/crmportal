@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import instance from './connection-config'
 import { addCommentSuccess, getCommentsSuccess, getCommentSuccess } from '../actions/comment-actions';
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
 
 /**
  * Get all users
@@ -10,7 +11,18 @@ import { addCommentSuccess, getCommentsSuccess, getCommentSuccess } from '../act
 
 export function getComments(type,entityid,from,size) {
   axios.defaults.baseURL = API_ROOT;
-  return axios.get("/search/comments/entity?from=" + from + "&size=" + size + "&type=" + type + "&entityid=" + entityid)
+  let params = {
+    "from": from,
+    "size": size,
+    "type": type,
+    "entityid": entityid,
+    "token": localStorage.token,
+    "userid": localStorage.userid
+  };
+  return axios({
+    method: 'get',
+    url: '/search/comments/entity' + encodeObjectToUriString(params)
+   })
     .then(function(response){
       console.log(response);
       let comments = response.data.hits;
@@ -23,6 +35,8 @@ export function getComments(type,entityid,from,size) {
  */
 
 export function addComment(comment) {
+  comment.token = localStorage.token;
+  comment.userid = localStorage.userid;
   axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
@@ -49,7 +63,9 @@ export function searchComments(value,from,size) {
     data: {
     "value":value,
     "from":from,
-    "size":size
+    "size":size,
+    "userid":localStorage.userid,
+    "token":localStorage.token
   }})
     .then(response => {
       let comments = response.data.hits;
@@ -80,7 +96,14 @@ export function deleteComment(userId) {
 
 export function getComment(commentId) {
   axios.defaults.baseURL = API_ROOT;
-  return axios.get("/comments/" + commentId).then(function(response){
+  let params = {
+    "token": localStorage.token,
+    "userid": localStorage.userid
+  };
+  return axios({
+    method: 'get',
+    url:'/comments/' + commentId  + encodeObjectToUriString(params)
+  }).then(function(response){
     store.dispatch(getCommentSuccess(response.data));
   });
 }

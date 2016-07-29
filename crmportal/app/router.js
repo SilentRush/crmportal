@@ -10,11 +10,13 @@ import TicketListContainer from "./components/containers/TicketListContainer";
 import TicketDetailContainer from "./components/containers/TicketDetailContainer";
 import AccountListContainer from "./components/containers/AccountListContainer";
 import AccountDetailContainer from "./components/containers/AccountDetailContainer";
+import Login from "./components/Login";
 import Home from "./components/Home";
 
 
 export default (
   <Router history={browserHistory}>
+    <Route path="/login" component={Login}></Route>
     <Route path="/" component={Layout}>
       <IndexRoute component={Home}></IndexRoute>
       <Route component={SearchLayoutContainer}>

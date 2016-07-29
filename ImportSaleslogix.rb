@@ -30,10 +30,12 @@ def parseUsers(url)
       "createdate" => Time.now.to_datetime,
       "updatedate" => Time.now.to_datetime
     }
-    url = 'http://localhost:9200/xtivia/user/' + currUser["userid"]
+    puts currUser.to_json
+    url = 'http://api.twilkislinux.sssworld-local.com/user'
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Put.new(uri.request_uri)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request['Content-Type'] = 'Application/Json'
     request.body = currUser.to_json
     response = http.request(request)
     puts response.body
@@ -154,5 +156,5 @@ def parseTickets(url)
 end
 
 parseUsers('https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate')
-parseAccounts('https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address\Address1,Address\State,Address\City,Address\PostalCode,Createdate&format=json&count=500')
-parseTickets('https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution\notes,TicketProblem\notes,CreateDate,NeededByDate,ReceivedDate,Account\AccountName,AssignedTo\User\UserName&count=1000&format=json')
+#parseAccounts('https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address\Address1,Address\State,Address\City,Address\PostalCode,Createdate&format=json&count=500')
+#parseTickets('https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution\notes,TicketProblem\notes,CreateDate,NeededByDate,ReceivedDate,Account\AccountName,AssignedTo\User\UserName&count=1000&format=json')
