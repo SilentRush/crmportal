@@ -24,7 +24,6 @@ class TicketDetailContainer extends React.Component{
     ticketApi.getTicket(ticketId).then(
       () => {
         accountApi.getAccount(this.props.ticket.account.accountid);
-        console.log(this.props);
       }
     );
   }

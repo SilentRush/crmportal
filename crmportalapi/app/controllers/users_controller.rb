@@ -3,7 +3,7 @@ require "uri"
 require "json"
 
 class UsersController < ApplicationController
-  skip_before_action :require_login, only: [:authenticateUser, :create]
+  skip_before_action :require_login, only: [:authenticateUser, :create, :show]
 
   include ActionController::Cookies
   def authenticateUser
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    url = "http://localhost:9200/xtivia/account/" + params["id"]
+    url = "http://localhost:9200/xtivia/user/" + params["id"]
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -65,7 +65,7 @@ class UsersController < ApplicationController
     res = http.request(request)
 
     body = JSON.parse(res.body)
-
+    body["_source"].delete("token")
     render json: body
   end
 

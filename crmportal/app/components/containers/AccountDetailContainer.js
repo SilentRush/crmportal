@@ -15,7 +15,6 @@ class AccountDetailContainer extends React.Component{
       currentIndex: 0,
       clickPage: (page) => {
         let f = page * 15;
-        console.log(this);
         this.setState({currentIndex: page});
         ticketApi.getAccountTickets(this.props.account.accountid,f,15);
       }

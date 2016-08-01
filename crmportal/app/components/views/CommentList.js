@@ -12,9 +12,7 @@ export default class CommentList extends React.Component{
     return(
       <div>
         {this.props.comments.hits.map((comment) => {
-          console.log("comment List");
-          console.log(comment);
-          return <ListItemWrapper key={genKey()} comment={comment} isEdit={this.props.isEdit} />
+          return <ListItemWrapper key={genKey()} comment={comment} />
         })}
       </div>
     )
@@ -25,7 +23,7 @@ var ListItemWrapper = React.createClass({
   render: function() {
     return (
       <div>
-        <CommentContainer comment={this.props.comment} commentid={this.props.comment._id} isEdit={this.props.isEdit} />
+        <CommentContainer comment={this.props.comment} commentid={this.props.comment._id} isEdit={false} isUpdate={true} />
       </div>
     )
   }

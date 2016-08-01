@@ -20,3 +20,10 @@ export function addCommentSuccess(comment) {
     comment
   };
 }
+
+export function deleteCommentSuccess(comment) {
+  return {
+    type: types.DELETE_COMMENT_SUCCESS,
+    comment
+  };
+}

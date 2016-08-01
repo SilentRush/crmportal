@@ -6,7 +6,6 @@ export default class AccountList extends React.Component{
     super();
   }
   createListItem(account){
-    console.log(account);
     const { accountname, accountid, notes, address } = account._source;
 
     return (

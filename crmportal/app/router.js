@@ -10,6 +10,8 @@ import TicketListContainer from "./components/containers/TicketListContainer";
 import TicketDetailContainer from "./components/containers/TicketDetailContainer";
 import AccountListContainer from "./components/containers/AccountListContainer";
 import AccountDetailContainer from "./components/containers/AccountDetailContainer";
+import BlogListContainer from "./components/containers/BlogListContainer";
+import BlogDetailContainer from "./components/containers/BlogDetailContainer";
 import Login from "./components/Login";
 import Home from "./components/Home";
 
@@ -27,6 +29,10 @@ export default (
         <Route path="accounts" component={AccountListContainer}></Route>
       </Route>
       <Route path="accounts/:accountid" component={AccountDetailContainer}></Route>
+      <Route component={SearchLayoutContainer}>
+        <Route path="blogs" component={BlogListContainer}></Route>
+      </Route>
+      <Route path="blogs/:blogid" component={BlogDetailContainer}></Route>
     </Route>
   </Router>
 );

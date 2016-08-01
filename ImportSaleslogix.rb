@@ -155,6 +155,6 @@ def parseTickets(url)
   end
 end
 
-parseUsers('https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate')
-#parseAccounts('https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address\Address1,Address\State,Address\City,Address\PostalCode,Createdate&format=json&count=500')
-#parseTickets('https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution\notes,TicketProblem\notes,CreateDate,NeededByDate,ReceivedDate,Account\AccountName,AssignedTo\User\UserName&count=1000&format=json')
+#parseUsers('https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate')
+parseAccounts('https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address\Address1,Address\State,Address\City,Address\PostalCode,Createdate&format=json&count=500')
+parseTickets('https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution\notes,TicketProblem\notes,CreateDate,NeededByDate,ReceivedDate,Account\AccountName,AssignedTo\User\UserName&count=1000&format=json')

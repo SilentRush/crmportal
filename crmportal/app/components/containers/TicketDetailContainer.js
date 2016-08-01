@@ -25,7 +25,7 @@ class TicketDetailContainer extends React.Component{
         accountApi.getAccount(this.props.ticket.account.accountid);
       }
     ).then(()=>{
-      this.commentList = <CommentListContainer isEdit={false} entityid={this.props.ticket.ticketid} type={"ticket"} />;
+      this.commentList = <CommentListContainer entityid={this.props.ticket.ticketid} type={"ticket"} />;
     });
   }
 
@@ -37,7 +37,6 @@ class TicketDetailContainer extends React.Component{
   }
 
   render(){
-    console.log(this.props.ticket);
     return (
       <div className="row">
         <div className="col-sm-3 col-xs-12 col-md-3">

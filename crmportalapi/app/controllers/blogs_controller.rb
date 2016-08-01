@@ -2,9 +2,9 @@ require 'net/http'
 require "uri"
 require "json"
 
-class CommentsController < ApplicationController
+class BlogsController < ApplicationController
   def index
-    url = "http://localhost:9200/xtivia/comment/_search/?size=" + params["size"] + "&from=" + params["from"] + "&sort=createdate:asc"
+    url = "http://localhost:9200/xtivia/blog/_search/?size=" + params["size"] + "&from=" + params["from"] + "&sort=createdate:asc"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -18,61 +18,16 @@ class CommentsController < ApplicationController
     render json: body
   end
 
-  def entityComment
-    query = {
-      "query" => {
-        "bool" => {
-          "must" => [
-            {
-              "match":{
-                "entityid" => "#{params["entityid"]}"
-              }
-            },
-            {
-              "match":{
-                "type" => "#{params["type"]}"
-              }
-            }
-          ]
-        }
-      },
-      "sort":[
-        {"createdate" => {"order"=>"asc"}}
-      ]
-    }
-    if(!params["size"].nil?)
-      query["size"] = params["size"]
-    end
-
-    if(!params["from"].nil?)
-      query["from"] = params["from"]
-    end
-
-    url = "http://localhost:9200/xtivia/comment/_search"
-    uri = URI.parse(url)
-
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.request_uri)
-    request.body = query.to_json
-    request['Content-Type'] = 'application/json'
-    res = http.request(request)
-
-    body = JSON.parse(res.body)
-
-    render json: body
-  end
-
   def create
     query = {
       "rawbody" => params["rawbody"],
-      "body" => params["body"],
       "entityid" => params["entityid"],
       "type" => params["type"],
       "userid" => params["userid"],
       "createdate" => Time.now.to_datetime,
       "updatedate" => Time.now.to_datetime
     }
-    url = "http://localhost:9200/xtivia/comment"
+    url = "http://localhost:9200/xtivia/blog"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -84,7 +39,7 @@ class CommentsController < ApplicationController
     body = JSON.parse(res.body)
 
 
-    url = "http://localhost:9200/xtivia/comment/" + body["_id"]
+    url = "http://localhost:9200/xtivia/blog/" + body["_id"]
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -99,7 +54,7 @@ class CommentsController < ApplicationController
   end
 
   def show
-    url = "http://localhost:9200/xtivia/comment/" + params["id"]
+    url = "http://localhost:9200/xtivia/blog/" + params["id"]
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -117,12 +72,11 @@ class CommentsController < ApplicationController
     query = {
       "doc" => {
         "rawbody" => params["rawbody"],
-        "body" => params["body"],
         "userid" => params["userid"],
         "updatedate" => Time.now.to_datetime
       }
     }
-    url = "http://localhost:9200/xtivia/comment/" + params["commentid"] + "/_update"
+    url = "http://localhost:9200/xtivia/blog/" + params["blogid"] + "/_update"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -135,7 +89,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    url = "http://localhost:9200/xtivia/comment/" + params["id"]
+    url = "http://localhost:9200/xtivia/blog/" + params["id"]
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -156,22 +110,7 @@ class CommentsController < ApplicationController
           "should" => [
             {
               "match":{
-                "account.accountname" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "commentproblem" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "commentsolution" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "assignedto.username" => "#{params["value"]}"
+                "blog" => "#{params["value"]}"
               }
             }
           ]
@@ -191,7 +130,7 @@ class CommentsController < ApplicationController
       query["from"] = params["from"]
     end
 
-    url = "http://localhost:9200/xtivia/comment/_search"
+    url = "http://localhost:9200/xtivia/blog/_search"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)

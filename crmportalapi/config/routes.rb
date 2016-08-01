@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :tickets
   resources :accounts
   resources :comments
+  resources :blogs
+  resources :users
 
   post '/tickets', to: 'tickets#index'
   post '/tickets/:ticketid', to: 'tickets#show'
@@ -19,4 +21,6 @@ Rails.application.routes.draw do
   post '/search/comments', to: 'comments#search'
 
   get '/search/comments/entity', to: 'comments#entityComment'
+
+  post '/search/blogs', to: 'blogs#search'
 end

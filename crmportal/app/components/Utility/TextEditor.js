@@ -28,8 +28,12 @@ export default class TextEditor extends React.Component {
     };
 
     this.submitClick = () => {
-      this.props.submitComment(convertToRaw(this.state.editorState.getCurrentContent()));
+      this.props.submitComment({rawbody:convertToRaw(this.state.editorState.getCurrentContent()),body:this.state.editorState.getCurrentContent().getPlainText()});
       this.setState({editorState: EditorState.createEmpty(this.decorator)});
+    }
+
+    this.updateClick = () => {
+      this.props.updateComment({rawbody:convertToRaw(this.state.editorState.getCurrentContent()),body:this.state.editorState.getCurrentContent().getPlainText()});
     }
 
     this.ticketDetails = (ticketid) => this._ticketDetails(ticketid);
@@ -121,9 +125,13 @@ export default class TextEditor extends React.Component {
       }
     }
 
-    const raw = convertToRaw(this.state.editorState.getCurrentContent());
-    var textEditor;
+    var textEditor, btn;
     if(this.props.isEdit){
+      if(this.props.isUpdate)
+        btn = <input type="button" value="Update" className="btn btn-primary" onClick={this.updateClick} />;
+      else {
+        btn = <input type="button" value="Submit" className="btn btn-success" onClick={this.submitClick} />
+      }
       textEditor =
       <div className="RichEditor-root">
         <BlockStyleControls
@@ -151,10 +159,7 @@ export default class TextEditor extends React.Component {
             blockRendererFn={this.myBlockRenderer}
           />
         </div>
-        <input type="button" value="submit" className="btn btn-success" onClick={this.submitClick} />
-        <div>
-          {JSON.stringify(raw)}
-        </div>
+        {btn}
       </div>;
     }
     else{

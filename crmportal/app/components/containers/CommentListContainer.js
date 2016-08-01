@@ -7,7 +7,6 @@ import CommentList from '../views/CommentList';
 class CommentListContainer extends React.Component{
   constructor(props){
     super(props);
-    console.log(this.props);
   }
   componentDidMount(){
     if(this.props.entityid)
@@ -16,7 +15,7 @@ class CommentListContainer extends React.Component{
 
   render(){
     return (
-      <CommentList comments={this.props.comments} isEdit={this.props.isEdit} />
+      <CommentList comments={this.props.comments} />
     )
   }
 }

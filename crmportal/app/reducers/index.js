@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 // Reducers
+import userReducer from './user-reducer';
 import ticketReducer from './ticket-reducer';
 import accountReducer from './account-reducer';
 import commentReducer from './comment-reducer';
@@ -11,7 +12,8 @@ var reducers = combineReducers({
     ticketState: ticketReducer,
     accountState: accountReducer,
     searchLayoutState: searchLayoutReducer,
-    commentState: commentReducer
+    commentState: commentReducer,
+    userState: userReducer
 });
 
 export default reducers;

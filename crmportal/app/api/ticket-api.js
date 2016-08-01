@@ -65,7 +65,6 @@ export function getAccountTickets(accountid,from,size) {
     url:'/search/tickets/account/' + accountid + encodeObjectToUriString(params)
   }).then(response => {
       let tickets = response.data.hits;
-      console.log(tickets);
       store.dispatch(getTicketsSuccess(tickets));
     });
 }

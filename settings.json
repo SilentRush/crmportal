@@ -1,0 +1,337 @@
+{
+  "mappings": {
+    "ticket": {
+      "properties": {
+        "account": {
+          "properties": {
+            "accountid": {
+              "type": "string"
+            },
+            "accountname": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            }
+          }
+        },
+        "assignedto": {
+          "properties": {
+            "userid": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            }
+          }
+        },
+        "createdate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "neededbydate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "receiveddate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "slxcreatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "slxupdatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "subject": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "ticketid": {
+          "type": "string"
+        },
+        "ticketproblem": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "ticketsolution": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "updatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        }
+      }
+    },
+    "comment": {
+      "properties": {
+        "body": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "createdate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "entityid": {
+          "type": "string"
+        },
+        "rawbody": {
+          "properties": {
+            "blocks": {
+              "properties": {
+                "depth": {
+                  "type": "long"
+                },
+                "entityRanges": {
+                  "properties": {
+                    "key": {
+                      "type": "long"
+                    },
+                    "length": {
+                      "type": "long"
+                    },
+                    "offset": {
+                      "type": "long"
+                    }
+                  }
+                },
+                "inlineStyleRanges": {
+                  "properties": {
+                    "length": {
+                      "type": "long"
+                    },
+                    "offset": {
+                      "type": "long"
+                    },
+                    "style": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "key": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            },
+            "entityMap": {
+              "properties": {
+                "0": {
+                  "properties": {
+                    "data": {
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "mutability": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "type": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "updatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "userid": {
+          "type": "string"
+        }
+      }
+    },
+    "user": {
+      "properties": {
+        "createdate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "firstname": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "lastname": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "slxcreatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "slxupdatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "token": {
+          "type": "string"
+        },
+        "updatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "userid": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      }
+    },
+    "account": {
+      "properties": {
+        "accountid": {
+          "type": "string"
+        },
+        "accountlogo": {
+          "type": "string"
+        },
+        "accountname": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "address": {
+          "properties": {
+            "addressid": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "state": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "streetaddress": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            },
+            "zip": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed"
+                }
+              }
+            }
+          }
+        },
+        "createdate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "notes": {
+          "type": "string",
+          "fields": {
+            "raw": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "slxcreatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "slxupdatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        },
+        "updatedate": {
+          "type": "date",
+          "format": "dateOptionalTime||epoch_millis"
+        }
+      }
+    }
+  }
+}

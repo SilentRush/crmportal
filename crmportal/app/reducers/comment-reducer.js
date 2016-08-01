@@ -23,10 +23,19 @@ const commentReducer = function(state = initialState, action) {
 
     case types.ADD_COMMENT_SUCCESS:
       var items = [].concat(state.comments.hits);
-      console.log(items);
       return Object.assign({}, state, {
         comments: {
           hits: items.concat([action.comment])
+        }
+      });
+
+    case types.DELETE_COMMENT_SUCCESS:
+      var items = [].concat(state.comments.hits);
+      return Object.assign({}, state, {
+        comments: {
+          hits: items.filter((item) =>{
+            return item._id != action.comment._id
+          })
         }
       });
 

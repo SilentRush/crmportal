@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../store';
 import instance from './connection-config'
-import { addCommentSuccess, getCommentsSuccess, getCommentSuccess, deleteCommentSuccess } from '../actions/comment-actions';
+import { addBlogSuccess, getBlogsSuccess, getBlogSuccess, deleteBlogSuccess } from '../actions/blog-actions';
 import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
 
 /**
@@ -9,19 +9,17 @@ import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapp
  */
  const API_ROOT = 'http://api.twilkislinux.sssworld-local.com/';
 
-export function getComments(type,entityid,from,size) {
+export function getBlogs(from,size) {
   axios.defaults.baseURL = API_ROOT;
   let params = {
     "from": from,
     "size": size,
-    "type": type,
-    "entityid": entityid,
     "token": localStorage.token,
     "userid": localStorage.userid
   };
   return axios({
     method: 'get',
-    url: '/search/comments/entity' + encodeObjectToUriString(params)
+    url: '/blogs' + encodeObjectToUriString(params)
    })
     .then(function(response){
       let comments = response.data.hits;
@@ -30,36 +28,36 @@ export function getComments(type,entityid,from,size) {
 }
 
 /**
- * create comment
+ * create blog
  */
 
-export function addComment(comment) {
-  comment.token = localStorage.token;
-  comment.userid = localStorage.userid;
+export function addBlog(blog) {
+  blog.token = localStorage.token;
+  blog.userid = localStorage.userid;
   axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
-    url: '/comments',
-    data: comment})
+    url: '/blogs',
+    data: blog})
     .then(response => {
-      let comment = response.data;
-      store.dispatch(addCommentSuccess(comment));
+      let blog = response.data;
+      store.dispatch(addBlogSuccess(blog));
     })
     .catch(error => {
       console.log(error);
     });
 }
 
-export function updateComment(comment) {
+export function updateBlog(blog) {
   comment.token = localStorage.token;
   comment.userid = localStorage.userid;
   axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'put',
-    url: '/comments/' + comment.commentid,
+    url: '/blogs/' + blog.blogid,
     data: comment})
     .then(response => {
-      let comment = response.data;
+      let blog = response.data;
       //store.dispatch(addCommentSuccess(comment));
     })
     .catch(error => {
@@ -68,14 +66,14 @@ export function updateComment(comment) {
 }
 
 /**
- * Search users
+ * Search blog
  */
 
-export function searchComments(value,from,size) {
+export function searchBlogs(value,from,size) {
   axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
-    url: '/search/comments',
+    url: '/search/blogs',
     data: {
     "value":value,
     "from":from,
@@ -84,8 +82,8 @@ export function searchComments(value,from,size) {
     "token":localStorage.token
   }})
     .then(response => {
-      let comments = response.data.hits;
-      store.dispatch(getCommentsSuccess(comments));
+      let blogs = response.data.hits;
+      store.dispatch(getBlogsSuccess(blogs));
     })
     .catch(error => {
       console.log(error);
@@ -94,19 +92,19 @@ export function searchComments(value,from,size) {
 
 
 /**
- * Delete a user
+ * Delete a blog
  */
 
-export function deleteComment(commentId) {
+export function deleteBlog(blogId) {
   return axios({
     method: 'delete',
-    url: '/comments/' + commentId,
+    url: '/blogs/' + blogId,
     data: {
     "userid":localStorage.userid,
     "token":localStorage.token
   }})
     .then(response => {
-      store.dispatch(deleteCommentSuccess(response.data));
+      store.dispatch(deleteBlogSuccess(response.data));
     })
     .catch(error => {
       console.log(error);
@@ -118,7 +116,7 @@ export function deleteComment(commentId) {
  * three XHR requests to get all the profile info.
  */
 
-export function getComment(commentId) {
+export function getBlog(blogId) {
   axios.defaults.baseURL = API_ROOT;
   let params = {
     "token": localStorage.token,
@@ -126,8 +124,8 @@ export function getComment(commentId) {
   };
   return axios({
     method: 'get',
-    url:'/comments/' + commentId  + encodeObjectToUriString(params)
+    url:'/blogs/' + blogId  + encodeObjectToUriString(params)
   }).then(function(response){
-    store.dispatch(getCommentSuccess(response.data));
+    store.dispatch(getBlogSuccess(response.data));
   });
 }

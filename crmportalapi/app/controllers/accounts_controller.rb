@@ -47,16 +47,21 @@ class AccountsController < ApplicationController
     query = {
       "query" => {
         "bool" => {
-          "should" => [
-            {
-              "wildcard":{
-                "accountname" => "*#{params["value"]}*"
+            "should" =>[
+              {
+                "match" => {
+                  "accountname" => "*#{params["value"]}*"
+                }
+              },
+              {
+                "match" => {
+                  "notes" => "*#{params["value"]}*"
+                }
               }
-            }
-          ]
-        }
+            ]
+          }
       },
-      "sort":[
+      "sort" => [
         "_score",
         {"accountname.raw" => {"order"=>"asc"}}
       ],
