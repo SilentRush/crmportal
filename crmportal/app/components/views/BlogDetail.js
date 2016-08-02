@@ -5,38 +5,34 @@ import TextEditor from "../Utility/TextEditor";
 export default class BlogDetail extends React.Component{
   constructor(props){
     super(props);
-
+    console.log(props);
   }
   render(){
-    var textEditor, blogDetails, blog
-    if(this.props.blog){
-      const {createdate,userid,updatedate} = this.props.blog._source;
-      let Createdate = new Date(createdate);
-      let Updatedate = new Date(updatedate);
-      if(localStorage.userid == userid){
-        var editBtn = <button className="btn btn-default" onClick={this.props.edit}>Edit</button>;
-        var delBtn = <button className="btn btn-danger" onClick={this.props.delete}>Delete</button>;
-      }
-      textEditor =
-      <span><TextEditor isEdit={this.props.isEdit} isUpdate={this.props.isUpdate} content={this.props.comment._source.rawbody} submitComment={this.props.submitComment} updateComment={this.props.updateComment} />{editBtn}{delBtn}</span>;
-      blogDetails =
-      <span>Posted on: {Createdate.toLocaleString()}  -  Updated at: {Updatedate.toLocaleString()}</span>
-    }
-    else{
-      textEditor = <span><TextEditor isEdit={this.props.isEdit} submitComment={this.props.submitComment} updateComment={this.props.updateComment} /></span>;
-    }
+    var textEditor, blogDetails, blog, thumbnailImg
+    const {title, thumbnail, rawbody, body, createdate,userid,updatedate} = this.props.blog._source;
+    const {firstname,lastname} = this.props.user._source;
+    let Createdate = new Date(createdate);
+    let Updatedate = new Date(updatedate);
+    if(this.props.blog._source.body)
+      textEditor =<span key={this.props.blog._id}><TextEditor isEdit={false} content={rawbody} /></span>;
+    else
+      textEditor = '';
+    blogDetails =
+    <span>Posted on: {Createdate.toLocaleString()}  -  Updated at: {Updatedate.toLocaleString()}</span>
 
-    if(this.props.showComment)
-      blog = textEditor;
+    if(this.props.blog._source.thumbnail)
+      thumbnailImg = <img src={thumbnail} onError={(e)=>{e.target.src = '';}} />
 
     return (
-      <div className="commentContainer">
-        <div className="commentHeader" onClick={this.props.toggleComment}>Test</div>
+      <div className="entityDetailContainer card-shadow">
+        <div className="entityDetailHeader" onClick={this.props.toggleComment} style={{fontSize:"2em"}}>{title}</div>
+        {thumbnailImg}
         <div className="editor">
-          {blog}
+          {textEditor}
         </div>
-        <div className="commentDetails">
+        <div className="entityDetail">
           {blogDetails}
+          <div>{firstname + " " + lastname}</div>
         </div>
       </div>
     )

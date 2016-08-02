@@ -22,12 +22,7 @@ const blogReducer = function(state = initialState, action) {
       return Object.assign({}, state, { blog: action.blog });
 
     case types.ADD_BLOG_SUCCESS:
-      var items = [].concat(state.blogs.hits);
-      return Object.assign({}, state, {
-        comments: {
-          hits: items.concat([action.blog])
-        }
-      });
+      return Object.assign({}, state, { blog: action.blog });
 
     case types.DELETE_BLOG_SUCCESS:
       var items = [].concat(state.blogs.hits);

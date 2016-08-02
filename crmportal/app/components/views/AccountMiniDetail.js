@@ -25,7 +25,7 @@ export default class AccountMiniDetail extends React.Component{
       <div className="AccountMiniDetailContainer card-shadow">
         <h4 className="AccountMiniDetail-Header"><Link to={"accounts/" + accountid}>{accountname}</Link></h4>
         <div className="AccountMiniDetail-Img">
-          <img src="http://www.teradata.com/uploadedImages/At-A-Glance/Our-Partners/XTIVIA_logo.png" />
+          <img src="http://www.teradata.com/uploadedImages/At-A-Glance/Our-Partners/XTIVIA_logo.png" style={{maxWidth:"100%"}} />
         </div>
         <hr style={hrStyle} />
         <div className="AccountDetail">

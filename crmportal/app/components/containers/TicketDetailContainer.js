@@ -44,9 +44,9 @@ class TicketDetailContainer extends React.Component{
         </div>
         <div className="col-sm-9 col-xs-12 col-md-9">
           <TicketDetail ticket={this.props.ticket} />
-          <div className="ticketDetailContainer card-shadow">
-            <div className="ticketDetailHeader">Comments</div>
-            <div className="ticketDetail">
+          <div className="entityDetailContainer card-shadow">
+            <div className="entityDetailHeader">Comments</div>
+            <div className="entityDetail">
               {this.commentList}
               <CommentContainer isEdit={true} entityid={this.props.ticket.ticketid} type={"ticket"} />
             </div>

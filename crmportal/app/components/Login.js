@@ -41,22 +41,24 @@ export default class Home extends React.Component{
   }
   render(){
     return (
-      <div className="loginContainer">
-        <div className="loginLogoContainer">
-          <img src="./images/xtivia.png" />
-        </div>
-        <div className="loginForm">
-          <form>
-            <div className="form-group">
-              <label for="username">Username</label>
-              <input type="text" className="form-control" id="username" placeholder="Username" value={this.state.username} onChange={this.changeUsername} />
-            </div>
-            <div className="form-group">
-              <label for="password">Password</label>
-              <input type="password" className="form-control" id="password" placeholder="Password" value={this.state.password} onChange={this.changePassword} />
-            </div>
-            <button type="submit" className="btn btn-default" onClick={this.submit} onSubmit={this.submit}>Submit</button>
-          </form>
+      <div className="contaier-fluid">
+        <div className="loginContainer">
+          <div className="loginLogoContainer">
+            <img src="./images/xtivia.png" />
+          </div>
+          <div className="loginForm">
+            <form>
+              <div className="form-group">
+                <label for="username">Username</label>
+                <input type="text" className="form-control" id="username" placeholder="Username" value={this.state.username} onChange={this.changeUsername} />
+              </div>
+              <div className="form-group">
+                <label for="password">Password</label>
+                <input type="password" className="form-control" id="password" placeholder="Password" value={this.state.password} onChange={this.changePassword} />
+              </div>
+              <button type="submit" className="btn btn-default" onClick={this.submit} onSubmit={this.submit}>Submit</button>
+            </form>
+          </div>
         </div>
       </div>
     )

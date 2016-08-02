@@ -26,6 +26,7 @@ class AccountDetailContainer extends React.Component{
       let accountId = this.props.params.accountid;
       accountApi.getAccount(accountId).then(()=>{
         this.commentList = <CommentListContainer isEdit={false} entityid={this.props.account.accountid} type={"account"} />;
+        console.log(this);
       });
       ticketApi.getAccountTickets(accountId,0,15);
   }

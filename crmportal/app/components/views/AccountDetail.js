@@ -10,9 +10,9 @@ export default class AccountDetail extends React.Component{
     const NotesStyle = {whiteSpace: "pre-line", wordWrap: "break-word"};
 
     return (
-      <div className="ticketDetailContainer card-shadow">
-        <div className="ticketDetailHeader">{accountname}</div>
-        <div className="ticketDetail">
+      <div className="entityDetailContainer card-shadow">
+        <div className="entityDetailHeader">{accountname}</div>
+        <div className="entityDetail">
           <a href={url} target="blank">Infor Account Link:  {accountid}</a><br />
           <label>Street Address:</label><p>{address.streetaddress}</p>
           <label>City:</label><p>{address.city}</p>

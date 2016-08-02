@@ -25,6 +25,8 @@ export default class TextEditor extends React.Component {
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
       this.setState({editorState});
+      if(this.props.changeBody)
+        this.props.changeBody({rawbody:convertToRaw(editorState.getCurrentContent()),body:editorState.getCurrentContent().getPlainText()});
     };
 
     this.submitClick = () => {
@@ -127,10 +129,12 @@ export default class TextEditor extends React.Component {
 
     var textEditor, btn;
     if(this.props.isEdit){
-      if(this.props.isUpdate)
-        btn = <input type="button" value="Update" className="btn btn-primary" onClick={this.updateClick} />;
-      else {
-        btn = <input type="button" value="Submit" className="btn btn-success" onClick={this.submitClick} />
+      if(!this.props.changeBody){
+        if(this.props.isUpdate)
+          btn = <input type="button" value="Update" className="btn btn-primary" onClick={this.updateClick} />;
+        else {
+          btn = <input type="button" value="Submit" className="btn btn-success" onClick={this.submitClick} />
+        }
       }
       textEditor =
       <div className="RichEditor-root">

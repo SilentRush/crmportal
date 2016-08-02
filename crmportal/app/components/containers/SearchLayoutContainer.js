@@ -12,6 +12,9 @@ const mapStateToProps = function(store) {
   if (searchType === 'accounts') {
     totalResults = store.accountState.accounts.hits.length;
   }
+  if (searchType === 'blogs') {
+    totalResults = store.blogState.blogs.hits.length;
+  }
   return {
     searchType,
     title: store.searchLayoutState.title,

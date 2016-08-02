@@ -14,9 +14,9 @@ export default class TicketDetail extends React.Component{
     let Updatedate = new Date(updatedate);
 
     return (
-      <div className="ticketDetailContainer card-shadow">
-        <div className="ticketDetailHeader">{subject}</div>
-        <div className="ticketDetail">
+      <div className="entityDetailContainer card-shadow">
+        <div className="entityDetailHeader">{subject}</div>
+        <div className="entityDetail">
           <label>Create on:</label><p>{Createdate.toLocaleString()}</p>
           <label>Updated on:</label><p>{Updatedate.toLocaleString()}</p>
           <label>Saleslogix Create Date:</label><p>{Slxcreatedate.toLocaleString()}</p>

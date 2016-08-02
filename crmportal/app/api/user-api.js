@@ -21,6 +21,7 @@ export function getUsers(from,size) {
     url:'/users' + encodeObjectToUriString(params)
   })
     .then(function(response){
+      console.log(response);
       store.dispatch(getUsersSuccess(response.data.hits));
     });
 }
@@ -78,4 +79,12 @@ export function getUser(userId) {
     console.log(response);
     store.dispatch(getUserSuccess(response.data));
   });
+}
+
+export function getUserFromStore(userid){
+  let userStore = store.getState().userState;
+  let user = userStore.users.hits.filter((user)=>{
+      return user._id === userid
+  });
+  return user[0];
 }

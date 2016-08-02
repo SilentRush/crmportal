@@ -21,8 +21,9 @@ class BlogsController < ApplicationController
   def create
     query = {
       "rawbody" => params["rawbody"],
-      "entityid" => params["entityid"],
-      "type" => params["type"],
+      "body" => params["body"],
+      "title" => params["title"],
+      "thumbnail" => params["thumbnail"],
       "userid" => params["userid"],
       "createdate" => Time.now.to_datetime,
       "updatedate" => Time.now.to_datetime

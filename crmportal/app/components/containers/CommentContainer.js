@@ -8,6 +8,8 @@ class CommentContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {showComment:true,isEdit:props.isEdit,isUpdate:props.isUpdate};
+    if(props.comment)
+      this.state.user = userApi.getUserFromStore(props.comment._source.userid);
     this.submitComment = (comment) => this._submitComment(comment);
     this.updateComment = (comment) => this._updateComment(comment);
     this.toggleComment = (e) => {
@@ -32,11 +34,9 @@ class CommentContainer extends React.Component{
   }
 
   componentDidMount(){
-      console.log(this.props.comment);
-      if(this.props.comment)
-        userApi.getUser(this.props.comment._source.userid);
 
   }
+
 
   _submitComment(comment){
     let commentObj = {
@@ -60,14 +60,14 @@ class CommentContainer extends React.Component{
 
   render(){
     return (
-      <Comment user={this.props.user} comment={this.props.comment} isEdit={this.state.isEdit} isUpdate={this.state.isUpdate} edit={this.edit} delete={this.delete} submitComment={this.submitComment} updateComment={this.updateComment} showComment={this.state.showComment} toggleComment={this.toggleComment} />
+      <Comment user={this.state.user} comment={this.props.comment} isEdit={this.state.isEdit} isUpdate={this.state.isUpdate} edit={this.edit} delete={this.delete} submitComment={this.submitComment} updateComment={this.updateComment} showComment={this.state.showComment} toggleComment={this.toggleComment} />
     )
   }
 }
 
 const mapStateToProps = function(store) {
   return {
-    user: store.userState.user
+    users: store.userState.users
   };
 };
 

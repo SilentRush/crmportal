@@ -69,6 +69,21 @@ class UsersController < ApplicationController
     render json: body
   end
 
+  def index
+    url = "http://localhost:9200/xtivia/user/_search/?size=" + params["size"] + "&from=" + params["from"]
+    uri = URI.parse(url)
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri.request_uri)
+
+    request['Content-Type'] = 'application/json'
+    res = http.request(request)
+
+    body = JSON.parse(res.body)
+
+    render json: body
+  end
+
   def update
   end
 

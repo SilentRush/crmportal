@@ -22,8 +22,9 @@ export function getBlogs(from,size) {
     url: '/blogs' + encodeObjectToUriString(params)
    })
     .then(function(response){
+      console.log(response);
       let comments = response.data.hits;
-      store.dispatch(getCommentsSuccess(comments));
+      store.dispatch(getBlogsSuccess(comments));
     });
 }
 

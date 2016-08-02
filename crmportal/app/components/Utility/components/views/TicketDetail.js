@@ -25,9 +25,9 @@ export default class TicketDetail extends React.Component{
     if(this.state.isActive){
         details =
         <div className="uiContextualLayerPositioner">
-          <div className="ticketDetailContainer card-shadow" style={style}>
-            <div className="ticketDetailHeader">{subject}</div>
-            <div className="ticketDetail">
+          <div className="entityDetailContainer card-shadow" style={style}>
+            <div className="entityDetailHeader">{subject}</div>
+            <div className="entityDetail">
               <label>Saleslogix Create Date:</label><p>{Slxcreatedate.toLocaleString()}</p>
               <label>Saleslogix Update Date:</label><p>{Slxupdatedate.toLocaleString()}</p>
               <label>Assigned To:</label><p>{assignedto.username}</p>
