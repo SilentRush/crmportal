@@ -16,6 +16,22 @@ import BlogInsertContainer from "./components/containers/BlogInsertContainer";
 import Login from "./components/Login";
 import Home from "./components/Home";
 
+var InsertBlogWrapper = React.createClass({
+  render () {
+    return (
+      <BlogInsertContainer isInsert="true" />
+    );
+  }
+});
+
+var UpdateBlogWrapper = React.createClass({
+  render () {
+    return (
+      <BlogInsertContainer isUpdate="true" />
+    );
+  }
+});
+
 
 export default (
   <Router history={browserHistory}>
@@ -23,18 +39,18 @@ export default (
     <Route path="/" component={Layout}>
       <IndexRoute component={Home}></IndexRoute>
       <Route component={SearchLayoutContainer}>
-        <Route path="tickets" component={TicketListContainer}></Route>
+        <Route path="tickets" component={TicketListContainer}>
+        </Route>
+        <Route path="accounts" component={AccountListContainer}>
+        </Route>
+        <Route path="blogs" component={BlogListContainer}>
+        </Route>
       </Route>
-      <Route path="tickets/:ticketid" component={TicketDetailContainer}></Route>
-      <Route component={SearchLayoutContainer}>
-        <Route path="accounts" component={AccountListContainer}></Route>
-      </Route>
-      <Route path="accounts/:accountid" component={AccountDetailContainer}></Route>
-      <Route component={SearchLayoutContainer}>
-        <Route path="blogs" component={BlogListContainer}></Route>
-      </Route>
-      <Route path="blogs/:blogid" component={BlogDetailContainer}></Route>
-      <Route path="insert/blog" component={BlogInsertContainer}></Route>
+      <Route path="/ticket/:ticketid" component={TicketDetailContainer}></Route>
+      <Route path="/account/:accountid" component={AccountDetailContainer}></Route>
+      <Route path="/blog/:blogid" component={BlogDetailContainer}></Route>
+      <Route path="insert/blog" component={InsertBlogWrapper}></Route>
+      <Route path="update/blog" component={UpdateBlogWrapper}></Route>
     </Route>
   </Router>
 );

@@ -52,11 +52,6 @@ class AccountsController < ApplicationController
                 "match" => {
                   "accountname" => "*#{params["value"]}*"
                 }
-              },
-              {
-                "match" => {
-                  "notes" => "*#{params["value"]}*"
-                }
               }
             ]
           }

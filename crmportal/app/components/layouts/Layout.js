@@ -8,10 +8,10 @@ import * as userApi from '../../api/user-api';
 
 
 class Layout extends React.Component{
-  constructor(props){
+  constructor(props,context){
     super(props);
     if(!localStorage.userid || !localStorage.token)
-      this.props.history.push('/login');
+      this.context.router.push('/login');
   }
 
   componentDidMount(){
@@ -31,6 +31,10 @@ class Layout extends React.Component{
     )
   }
 }
+
+Layout.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 const mapStateToProps = function(store) {
   return {

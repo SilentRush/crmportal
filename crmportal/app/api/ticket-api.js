@@ -62,7 +62,7 @@ export function getAccountTickets(accountid,from,size) {
   };
   return axios({
     method: 'get',
-    url:'/search/tickets/account/' + accountid + encodeObjectToUriString(params)
+    url:'/search/ticket/account/' + accountid + encodeObjectToUriString(params)
   }).then(response => {
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));

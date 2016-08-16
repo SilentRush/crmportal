@@ -13,6 +13,15 @@ export default class TextEditor extends React.Component {
     const customBlockRenderMap = Immutable.Map({
       'ticketDetails': {
         element: 'div',
+      },
+      'center': {
+        element: 'div',
+      },
+      'left': {
+        element: 'div',
+      },
+      'right': {
+        element: 'div'
       }
     });
 
@@ -46,7 +55,11 @@ export default class TextEditor extends React.Component {
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
 
-
+    this.handlePaste = (f) => {
+      var image = document.createElement('img');
+      image.src = window.URL.createObjectURL(f[0]);
+      document.body.appendChild(image);
+    }
 
   }
 
@@ -161,6 +174,7 @@ export default class TextEditor extends React.Component {
             ref="editor"
             spellCheck={true}
             blockRendererFn={this.myBlockRenderer}
+            handlePastedFiles={this.handlePaste}
           />
         </div>
         {btn}
@@ -196,14 +210,14 @@ export default class TextEditor extends React.Component {
 
 const atomicHandler = (props) => {
    const entity = Entity.get(props.block.getEntityAt(0));
-   const {ticketid} = entity.getData();
    const type = entity.getType();
 
    let component;
    if (type === 'ticketDetails') {
+     const {ticketid} = entity.getData();
      component = <TicketDetailContainer ticketid={ticketid} />;
-   } else if (type === '') {
-   //  component = <Image src={src} />;
+   } else if (type === 'center') {
+     component = <div></div>
    }
 
    return component;
@@ -220,12 +234,27 @@ const styleMap = {
   HIGHLIGHT: {
     backgroundColor: 'rgb(133, 251, 255)',
     color: 'black'
+  },
+  H1: {
+    fontSize: '3.5em'
+  },
+  H2: {
+    fontSize: '2.0em'
+  },
+  H3: {
+    fontSize: '1.5em'
+  },
+  H4: {
+    fontSize: '0.8em'
   }
 };
 
 function getBlockStyle(block) {
   switch (block.getType()) {
-    case 'blockquote': return 'RichEditor-blockquote';
+    case 'blockquote': return '.RichEditor-blockquote';
+    case 'left': return 'editorAlignLeft';
+    case 'center': return 'editorAlignCenter';
+    case 'right': return 'editorAlignRight';
     default: return null;
   }
 }
@@ -254,16 +283,13 @@ class StyleButton extends React.Component {
 }
 
 const BLOCK_TYPES = [
-  {label: 'H1', style: 'header-one'},
-  {label: 'H2', style: 'header-two'},
-  {label: 'H3', style: 'header-three'},
-  {label: 'H4', style: 'header-four'},
-  {label: 'H5', style: 'header-five'},
-  {label: 'H6', style: 'header-six'},
   {label: 'Blockquote', style: 'blockquote'},
   {label: 'UL', style: 'unordered-list-item'},
   {label: 'OL', style: 'ordered-list-item'},
-  {label: 'Code Block', style: 'code-block'}
+  {label: 'Code Block', style: 'code-block'},
+  {label: <span className="glyphicon glyphicon-align-left" key="left"></span>, style: 'left'},
+  {label: <span className="glyphicon glyphicon-align-center" key="center"></span>, style: 'center'},
+  {label: <span className="glyphicon glyphicon-align-right" key="right"></span>, style: 'right'}
 ];
 
 const BlockStyleControls = (props) => {
@@ -278,7 +304,7 @@ const BlockStyleControls = (props) => {
     <div className="RichEditor-controls">
       {BLOCK_TYPES.map((type) =>
         <StyleButton
-          key={type.label}
+          key={type.style}
           active={type.style === blockType}
           label={type.label}
           onToggle={props.onToggle}
@@ -294,7 +320,11 @@ var INLINE_STYLES = [
   {label: 'Italic', style: 'ITALIC'},
   {label: 'Underline', style: 'UNDERLINE'},
   {label: 'Monospace', style: 'CODE'},
-  {label: 'Highlight', style:'HIGHLIGHT'}
+  {label: 'Highlight', style:'HIGHLIGHT'},
+  {label: 'H1', style:'H1'},
+  {label: 'H2', style:'H2'},
+  {label: 'H3', style:'H3'},
+  {label: 'H4', style:'H4'}
 ];
 
 const InlineStyleControls = (props) => {

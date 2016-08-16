@@ -2,27 +2,33 @@ import React from "react";
 import { Link, browserHistory } from "react-router";
 
 export default class BlogList extends React.Component{
-  constructor(props){
-    super();
-
+  constructor(props, context){
+    super(props);
   }
-  createListItem(blog){
-    const { title, thumbnail } = blog._source;
 
+  createListItem(blog){
+    const { title, thumbnail,createdate, body } = blog._source;
+    let Createdate = new Date(createdate);
+    let thumb = thumbnail;
+    if(thumb == "")
+      thumb = "";
     return (
       <div key={blog._id} className="ticketListContainer">
         <div className="ticketListItem">
-          <div><Link to={"blogs/" +blog._id}>{title}</Link></div>
-          <img src={thumbnail} onError={(e)=>{e.target.src = '';}}></img>
+          <img src={thumb} onError={(e)=>{e.target.src = '';}} style={{borderRadius:"4px 4px 0px 0px",width:"100%"}}></img>
+          <div className="blogBody">
+            <div><Link to={"/blog/" +blog._id}>{title}</Link></div>
+            <div>{body.substring(0,200) + "..."}</div>
+            <div>{Createdate.toLocaleString()}</div>
+          </div>
         </div>
       </div>
     )
   }
   render(){
-    console.log(this.props);
     return(
       <div>
-        <input type="button" className="btn btn-success" value="Create a Blog" onClick={()=>{this.props.history.push('insert/blog')}} />
+        <input type="button" className="btn btn-success" value="Create a Blog" onClick={()=>{this.context.router.push('/insert/blog')}} />
         <div className="row">
           <div className="col-sm-4 col-xs-12 col-md-4">
             {this.props.blogs1.map(this.createListItem)}
@@ -38,3 +44,7 @@ export default class BlogList extends React.Component{
     )
   }
 }
+
+BlogList.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};

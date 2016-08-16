@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   post '/user', to: 'users#create';
 
   post '/search/tickets', to: 'tickets#search'
-  get '/search/tickets/account/:accountid', to: 'tickets#getAccountTickets'
+  get '/search/ticket/account/:accountid', to: 'tickets#getAccountTickets'
 
   post '/search/accounts', to: 'accounts#search'
 

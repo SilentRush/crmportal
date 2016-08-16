@@ -10,7 +10,7 @@ export default class TicketMiniList extends React.Component{
 
     return (
       <div key={ticketid} className="ticketListMini">
-          <div><Link to={"tickets/" +ticketid}>{ticketid} - {subject}</Link></div>
+          <div><Link to={"/ticket/" +ticketid}>{ticketid} - {subject}</Link></div>
       </div>
     )
   }

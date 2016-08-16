@@ -31,7 +31,7 @@ class BlogDetailContainer extends React.Component{
         <div className="col-sm-12 col-xs-12 col-md-12">
           <BlogDetail user={this.props.user} blog={this.props.blog} />
           <div className="entityDetailContainer card-shadow">
-            <div className="entityDetailHeader">Comments</div>
+            <div className="commentsHeader">Comments</div>
             <div className="entityDetail">
               {this.state.commentList}
               <CommentContainer isEdit={true} entityid={this.props.blog._id} type={"blog"} />

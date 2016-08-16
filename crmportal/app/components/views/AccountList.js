@@ -11,7 +11,7 @@ export default class AccountList extends React.Component{
     return (
       <div key={accountid} className="ticketListContainer">
         <div className="ticketListItem">
-          <div><Link to={"accounts/" +accountid}>{accountname}</Link></div>
+          <div><Link to={"/account/" +accountid}>{accountname}</Link></div>
           <div>{address.streetaddress}</div>
         </div>
       </div>

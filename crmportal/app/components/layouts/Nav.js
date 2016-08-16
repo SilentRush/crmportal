@@ -1,16 +1,16 @@
 import React from "react";
-import {Link, IndexLink, browserHistory} from "react-router";
+import {Link, IndexLink, browserHistory, router} from "react-router";
 
 export default class Nav extends React.Component{
-  constructor (){
-    super();
+  constructor (props,context){
+    super(props);
     this.logout = () => {
       localStorage.removeItem("firstname");
       localStorage.removeItem("lastname");
       localStorage.removeItem("userid");
       localStorage.removeItem("username");
       localStorage.removeItem("token");
-      this.props.history.push('/login');
+      this.context.router.push('/login');
     };
   }
   render(){
@@ -33,18 +33,18 @@ export default class Nav extends React.Component{
                 <li className="dropdown">
                   <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Support <span className="caret"></span></a>
                     <ul className="dropdown-menu">
-                      <li className={ticketsClass}><Link to="tickets">Tickets</Link></li>
-                      <li className={accountsClass}><Link to="accounts">Accounts</Link></li>
+                      <li className={ticketsClass}><Link to="/tickets">Tickets</Link></li>
+                      <li className={accountsClass}><Link to="/accounts">Accounts</Link></li>
                     </ul>
                 </li>
                 <li className="dropdown">
                   <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Development <span className="caret"></span></a>
                     <ul className="dropdown-menu">
-                      <li className={ticketsClass}><Link to="tickets">Tickets</Link></li>
-                      <li className={accountsClass}><Link to="accounts">Accounts</Link></li>
+                      <li className={ticketsClass}><Link to="/tickets">Projects</Link></li>
+                      <li className={accountsClass}><Link to="/accounts">Tasks</Link></li>
                     </ul>
                 </li>
-                <li className={blogsClass}><Link to="blogs">Blogs</Link></li>
+                <li className={blogsClass}><Link to="/blogs">Blogs</Link></li>
               </ul>
               <form role="search" className="navbar-form navbar-right">
                   <div className="form-group">
@@ -58,3 +58,7 @@ export default class Nav extends React.Component{
     );
   }
 }
+
+Nav.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};

@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
 
 export default class Home extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state = {username:'',password:''};
     this.changeUsername = (e) => { this.setState({username:e.target.value})};
@@ -22,14 +22,12 @@ export default class Home extends React.Component{
         "username":this.state.username
       }})
         .then(response => {
-          console.log(response);
           localStorage.setItem("firstname",response.data._source.firstname);
           localStorage.setItem("lastname",response.data._source.lastname);
           localStorage.setItem("userid",response.data._source.userid);
           localStorage.setItem("username",response.data._source.username);
           localStorage.setItem("token",response.data._source.token);
-          console.log(localStorage);
-          this.props.history.push('/');
+          this.context.router.push('/');
         })
         .catch(error => {
           console.log(error);
@@ -64,3 +62,7 @@ export default class Home extends React.Component{
     )
   }
 }
+
+Home.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};

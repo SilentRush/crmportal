@@ -15,7 +15,7 @@ export default class TicketList extends React.Component{
     return (
       <div key={ticketid} className="ticketListContainer">
         <div className="ticketListItem">
-          <div><Link to={"tickets/" +ticketid}>{ticketid} - {subject}</Link></div>
+          <div><Link to={"/ticket/" +ticketid}>{ticketid} - {subject}</Link></div>
           <div>{account.accountname}</div>
           <div>Create Date: {Slxcreatedate.toLocaleString()} - Update Date: {Slxupdatedate.toLocaleString()}</div>
         </div>
