@@ -27,6 +27,7 @@ export default class Home extends React.Component{
           localStorage.setItem("userid",response.data._source.userid);
           localStorage.setItem("username",response.data._source.username);
           localStorage.setItem("token",response.data._source.token);
+          localStorage.setItem("saleslogixAuth", authToken);
           this.context.router.push('/');
         })
         .catch(error => {

@@ -51,6 +51,7 @@ export default (
       <Route path="/blog/:blogid" component={BlogDetailContainer}></Route>
       <Route path="insert/blog" component={InsertBlogWrapper}></Route>
       <Route path="update/blog" component={UpdateBlogWrapper}></Route>
+      <Route path="*" component={Login}/>
     </Route>
   </Router>
 );

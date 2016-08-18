@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Comment from "../views/Comment";
 import * as commentApi from '../../api/comment-api';
 import * as userApi from '../../api/user-api';
+import {NotificationManager} from 'react-notifications';
 
 class CommentContainer extends React.Component{
   constructor(props){
@@ -29,12 +30,13 @@ class CommentContainer extends React.Component{
         this.setState({isEdit:true});
     }
     this.delete = () => {
-      commentApi.deleteComment(this.props.comment._id);
+      commentApi.deleteComment(this.props.comment._id).then(()=>{
+        NotificationManager.warning('Comment Successfully Deleted.', '', 2500);
+      });
     }
   }
 
   componentDidMount(){
-
   }
 
 
@@ -45,7 +47,9 @@ class CommentContainer extends React.Component{
       type: this.props.type,
       entityid: this.props.entityid
     }
-    commentApi.addComment(commentObj);
+    commentApi.addComment(commentObj).then(()=>{
+      NotificationManager.success('Comment Successfully Added.', '', 2500);
+    });
   }
 
   _updateComment(comment){
@@ -54,7 +58,9 @@ class CommentContainer extends React.Component{
       body: comment.body,
       commentid: this.props.comment._id
     }
-    commentApi.updateComment(commentObj);
+    commentApi.updateComment(commentObj).then(()=>{
+      NotificationManager.info('Comment Successfully Updated.', '', 2500);
+    });
     this.setState({isEdit:false});
   }
 

@@ -1,16 +1,17 @@
 import axios from 'axios';
 import store from '../store';
-import instance from './connection-config'
 import { getTicketsSuccess, getTicketSuccess } from '../actions/ticket-actions';
-import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
+import {apiBaseUrl} from './config';
+import {Logout} from '../components/Utility/Logout';
+
+axios.defaults.baseURL = apiBaseUrl;
 
 /**
  * Get all users
  */
- const API_ROOT = 'http://api.twilkislinux.sssworld-local.com/';
 
 export function getTickets(from,size) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "from":from,
     "size":size,
@@ -23,6 +24,29 @@ export function getTickets(from,size) {
     .then(function(response){
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
+    });
+}
+
+
+export function updateTicket(ticket) {
+  ticket.token = localStorage.token;
+  ticket.userid = localStorage.userid;
+  ticket.saleslogixAuth = localStorage.saleslogixAuth;
+  return axios({
+    method: 'put',
+    url: '/tickets/' + ticket.ticketid,
+    data: ticket})
+    .then(response => {
+      let ticket = response.data;
+      //store.dispatch(addCommentSuccess(comment));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -32,7 +56,6 @@ export function getTickets(from,size) {
  */
 
 export function searchTickets(value,from,size) {
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
     url: '/search/tickets',
@@ -47,13 +70,13 @@ export function searchTickets(value,from,size) {
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
 export function getAccountTickets(accountid,from,size) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "from": from,
     "size": size,
@@ -66,6 +89,10 @@ export function getAccountTickets(accountid,from,size) {
   }).then(response => {
       let tickets = response.data.hits;
       store.dispatch(getTicketsSuccess(tickets));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -78,6 +105,10 @@ export function deleteUser(userId) {
     .then(response => {
       store.dispatch(deleteUserSuccess(userId));
       return response;
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -87,7 +118,6 @@ export function deleteUser(userId) {
  */
 
 export function getTicket(ticketId) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
@@ -97,5 +127,9 @@ export function getTicket(ticketId) {
     url:'/tickets/' + ticketId + encodeObjectToUriString(params)
   }).then(function(response){
     store.dispatch(getTicketSuccess(response.data._source));
+  })
+  .catch(function(error){
+    if(error.status == 401)
+      Logout();
   });
 }

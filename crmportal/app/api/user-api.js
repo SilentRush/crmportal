@@ -1,15 +1,17 @@
 import axios from 'axios';
 import store from '../store';
-import instance from './connection-config'
 import { getUsersSuccess, getUserSuccess } from '../actions/user-actions';
-import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
+import {apiBaseUrl} from './config';
+import {Logout} from '../components/Utility/Logout';
+
+axios.defaults.baseURL = apiBaseUrl;
 
 /**
  * Get all users
  */
 
 export function getUsers(from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   let params = {
     "from": from,
     "size": size,
@@ -21,8 +23,11 @@ export function getUsers(from,size) {
     url:'/users' + encodeObjectToUriString(params)
   })
     .then(function(response){
-      console.log(response);
       store.dispatch(getUsersSuccess(response.data.hits));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -32,7 +37,6 @@ export function getUsers(from,size) {
  */
 
 export function searchUsers(value,from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   return axios({
       method: 'post',
       url: '/search/users',
@@ -46,6 +50,10 @@ export function searchUsers(value,from,size) {
     .then(response => {
       let users = response.data.hits;
       store.dispatch(getUsersSuccess(users));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -58,6 +66,10 @@ export function deleteUser(userId) {
     .then(response => {
       store.dispatch(deleteUserSuccess(userId));
       return response;
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -67,7 +79,6 @@ export function deleteUser(userId) {
  */
 
 export function getUser(userId) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
@@ -76,8 +87,11 @@ export function getUser(userId) {
     method: 'get',
     url:'/users/' + userId + encodeObjectToUriString(params)
   }).then(function(response){
-    console.log(response);
     store.dispatch(getUserSuccess(response.data));
+  })
+  .catch(function(error){
+    if(error.status == 401)
+      Logout();
   });
 }
 

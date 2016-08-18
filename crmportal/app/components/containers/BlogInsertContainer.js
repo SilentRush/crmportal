@@ -5,6 +5,7 @@ import BlogInsert from "../views/BlogInsert";
 import {Entity} from 'draft-js';
 import { Link, browserHistory } from "react-router";
 import {addError,removeError} from "../Utility/ErrorUtilities";
+import {NotificationManager} from 'react-notifications';
 
 class BlogInsertContainer extends React.Component{
   constructor(props){
@@ -89,6 +90,7 @@ class BlogInsertContainer extends React.Component{
           thumbnail: this.state.thumbnail
         }
         blogApi.addBlog(blogObj).then(() => {
+          NotificationManager.success('Save Successful','',2500);
           this.context.router.push('/blog/' + this.props.blog._id);
         });
       }
@@ -116,7 +118,6 @@ class BlogInsertContainer extends React.Component{
       let blogId;
       blogId = this.props.params.blogid;
       blogApi.getBlog(blogId).then(()=>{
-        console.log(this.props.blog._source);
         const {title, thumbnail, rawbody, body, createdate,userid,updatedate} = this.props.blog._source;
         this.setState({title:title,rawbody:rawbody,body:body,thumbnail:thumbnail});
       });

@@ -1,15 +1,16 @@
 import axios from 'axios';
 import store from '../store';
-import instance from './connection-config'
 import { getAccountsSuccess, getAccountSuccess } from '../actions/account-actions';
-import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
+import {apiBaseUrl} from './config';
+import {Logout} from '../components/Utility/Logout';
 
+axios.defaults.baseURL = apiBaseUrl;
 /**
  * Get all users
  */
 
 export function getAccounts(from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   let params = {
     "from": from,
     "size": size,
@@ -20,18 +21,39 @@ export function getAccounts(from,size) {
     method: 'get',
     url:'/accounts' + encodeObjectToUriString(params)
   })
-    .then(function(response){
-      store.dispatch(getAccountsSuccess(response.data.hits));
-    });
+  .then(function(response){
+    store.dispatch(getAccountsSuccess(response.data.hits));
+  })
+  .catch(function(error){
+    if(error.status == 401)
+      Logout();
+  });
 }
 
+
+export function updateAccount(account) {
+  account.token = localStorage.token;
+  account.userid = localStorage.userid;
+  account.saleslogixAuth = localStorage.saleslogixAuth;
+  return axios({
+    method: 'put',
+    url: '/accounts/' + account.accountid,
+    data: account})
+    .then(response => {
+      let account = response.data;
+      //store.dispatch(addCommentSuccess(comment));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
+    });
+}
 
 /**
  * Search users
  */
 
 export function searchAccounts(value,from,size) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   return axios({
       method: 'post',
       url: '/search/accounts',
@@ -45,6 +67,10 @@ export function searchAccounts(value,from,size) {
     .then(response => {
       let accounts = response.data.hits;
       store.dispatch(getAccountsSuccess(accounts));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -57,6 +83,10 @@ export function deleteUser(userId) {
     .then(response => {
       store.dispatch(deleteUserSuccess(userId));
       return response;
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -66,7 +96,6 @@ export function deleteUser(userId) {
  */
 
 export function getAccount(accountId) {
-  axios.defaults.baseURL = 'http://api.twilkislinux.sssworld-local.com/';
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
@@ -76,5 +105,9 @@ export function getAccount(accountId) {
     url:'/accounts/' + accountId + encodeObjectToUriString(params)
   }).then(function(response){
     store.dispatch(getAccountSuccess(response.data._source));
+  })
+  .catch(function(error){
+    if(error.status == 401)
+      Logout();
   });
 }

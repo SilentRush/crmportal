@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 export default class AccountList extends React.Component{
   constructor(props){
-    super();
+    super(props);
   }
   createListItem(account){
     const { accountname, accountid, notes, address } = account._source;

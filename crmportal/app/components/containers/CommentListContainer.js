@@ -9,14 +9,16 @@ class CommentListContainer extends React.Component{
     super(props);
   }
   componentDidMount(){
-    console.log("here");
     if(this.props.entityid)
-      commentApi.getComments(this.props.type,this.props.entityid,0, 40);
+      commentApi.getComments(this.props.type,this.props.entityid,0, 40).then(()=>{
+      });
   }
 
   render(){
     return (
-      <CommentList comments={this.props.comments} />
+      <div>
+        <CommentList comments={this.props.comments} />
+      </div>
     )
   }
 }

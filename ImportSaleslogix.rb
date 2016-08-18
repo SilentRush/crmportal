@@ -1,8 +1,9 @@
-require 'net/https'
-require 'net/http'
+require "net/https"
+require "net/http"
 require "uri"
 require "json"
-require 'date'
+require "date"
+require "time"
 
 def parseUsers(url)
   uri = URI.parse(url)
@@ -12,7 +13,7 @@ def parseUsers(url)
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   request = Net::HTTP::Get.new(uri.request_uri)
   request.basic_auth("twilkis", "twilkis99")
-  request['Content-Type'] = 'application/json'
+  request["Content-Type"] = "application/json"
   response = http.request(request)
 
   body = JSON.parse(response.body)
@@ -21,21 +22,23 @@ def parseUsers(url)
 
   users.each do |user|
     currUser = {
-      "username" => user["UserName"],
-      "userid" => user["$key"],
-      "firstname" => user["UserInfo"]["FirstName"],
-      "lastname" => user["UserInfo"]["LastName"],
-      "slxcreatedate" => Time.at(/(\d+)/.match(user["CreateDate"])[0].to_i/1000).to_datetime,
-      "slxupdatedate" => Time.at(/(\d+)/.match(user["$updated"])[0].to_i/1000).to_datetime,
-      "createdate" => Time.now.to_datetime,
-      "updatedate" => Time.now.to_datetime
+      "doc" => {
+        "username" => user["UserName"],
+        "userid" => user["$key"],
+        "firstname" => user["UserInfo"]["FirstName"],
+        "lastname" => user["UserInfo"]["LastName"],
+        "slxcreatedate" => Time.at(/(\d+)/.match(user["CreateDate"])[0].to_i/1000).to_datetime,
+        "slxupdatedate" => Time.at(/(\d+)/.match(user["$updated"])[0].to_i/1000).to_datetime,
+        "createdate" => Time.now.to_datetime,
+        "updatedate" => Time.now.to_datetime
+      }
     }
     puts currUser.to_json
-    url = 'http://api.twilkislinux.sssworld-local.com/user'
+    url = "http://api.twilkislinux.sssworld-local.com/user/" + user["$key"].to_s + "/_update"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
-    request['Content-Type'] = 'Application/Json'
+    request["Content-Type"] = "Application/Json"
     request.body = currUser.to_json
     response = http.request(request)
     puts response.body
@@ -50,7 +53,7 @@ def parseAccounts(url)
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   request = Net::HTTP::Get.new(uri.request_uri)
   request.basic_auth("twilkis", "twilkis99")
-  request['Content-Type'] = 'application/json'
+  request["Content-Type"] = "application/json"
   response = http.request(request)
 
   body = JSON.parse(response.body)
@@ -58,25 +61,27 @@ def parseAccounts(url)
   accounts = body["$resources"]
   accounts.each do |user|
     currAccount = {
-      "accountid" => user["$key"],
-      "accountname" => user["AccountName"],
-      "notes" => user["Notes"],
-      "address" => {
-        "addressid" => user["Address"]["$key"],
-        "streetaddress" => user["Address"]["Address1"],
-        "city" => user["Address"]["City"],
-        "state" => user["Address"]["State"],
-        "zip" => user["Address"]["PostalCode"]
-      },
-      "slxcreatedate" => Time.at(/(\d+)/.match(user["CreateDate"])[0].to_i/1000).to_datetime,
-      "slxupdatedate" => Time.at(/(\d+)/.match(user["$updated"])[0].to_i/1000).to_datetime,
-      "createdate" => Time.now.to_datetime,
-      "updatedate" => Time.now.to_datetime
+      "doc" => {
+        "accountid" => user["$key"],
+        "accountname" => user["AccountName"],
+        "notes" => user["Notes"],
+        "address" => {
+          "addressid" => user["Address"]["$key"],
+          "streetaddress" => user["Address"]["Address1"],
+          "city" => user["Address"]["City"],
+          "state" => user["Address"]["State"],
+          "zip" => user["Address"]["PostalCode"]
+        },
+        "slxcreatedate" => Time.at(/(\d+)/.match(user["CreateDate"])[0].to_i/1000).to_datetime,
+        "slxupdatedate" => Time.at(/(\d+)/.match(user["$updated"])[0].to_i/1000).to_datetime,
+        "createdate" => Time.now.to_datetime,
+        "updatedate" => Time.now.to_datetime
+      }
     }
-    url = 'http://localhost:9200/xtivia/account/' + currAccount["accountid"]
+    url = "http://localhost:9200/xtivia/account/" + user["$key"].to_s + "/_update"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Put.new(uri.request_uri)
+    request = Net::HTTP::Post.new(uri.request_uri)
     request.body = currAccount.to_json
     response = http.request(request)
     puts response.body
@@ -95,7 +100,7 @@ def parseTickets(url)
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
   request = Net::HTTP::Get.new(uri.request_uri)
   request.basic_auth("twilkis", "twilkis99")
-  request['Content-Type'] = 'application/json'
+  request["Content-Type"] = "application/json"
   response = http.request(request)
 
   body = JSON.parse(response.body)
@@ -121,31 +126,33 @@ def parseTickets(url)
       userid = nil
     end
 
-    currAccount = {
-      "ticketid" => user["$key"],
-      "ticketproblem" => user["TicketProblem"]["Notes"],
-      "ticketsolution" => user["TicketSolution"]["Notes"],
-      "subject" => user["Subject"],
-      "account" => {
-        "accountid" => user["Account"]["$key"],
-        "accountname" => user["Account"]["AccountName"]
-      },
-      "assignedto" => {
-        "userid" => userid,
-        "username" => username
-      },
-      "neededbydate" => neededbydate,
-      "receiveddate" => receiveddate,
-      "slxcreatedate" => Time.at(/(\d+)/.match(user["CreateDate"])[0].to_i/1000).to_datetime,
-      "slxupdatedate" => Time.at(/(\d+)/.match(user["$updated"])[0].to_i/1000).to_datetime,
-      "createdate" => Time.now.to_datetime,
-      "updatedate" => Time.now.to_datetime
+    currTicket = {
+      "doc" => {
+        "ticketid" => user["$key"],
+        "ticketproblem" => user["TicketProblem"]["Notes"],
+        "ticketsolution" => user["TicketSolution"]["Notes"],
+        "subject" => user["Subject"],
+        "account" => {
+          "accountid" => user["Account"]["$key"],
+          "accountname" => user["Account"]["AccountName"]
+        },
+        "assignedto" => {
+          "userid" => userid,
+          "username" => username
+        },
+        "neededbydate" => neededbydate,
+        "receiveddate" => receiveddate,
+        "slxcreatedate" => Time.at(/(\d+)/.match(user["CreateDate"])[0].to_i/1000).to_datetime,
+        "slxupdatedate" => Time.at(/(\d+)/.match(user["$updated"])[0].to_i/1000).to_datetime,
+        "createdate" => Time.now.to_datetime,
+        "updatedate" => Time.now.to_datetime
+      }
     }
-    url = 'http://localhost:9200/xtivia/ticket/' + currAccount["ticketid"]
+    url = "http://localhost:9200/xtivia/ticket/" + user["$key"].to_s + "/_update"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Put.new(uri.request_uri)
-    request.body = currAccount.to_json
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = currTicket.to_json
     response = http.request(request)
     puts response.body
   end
@@ -155,6 +162,16 @@ def parseTickets(url)
   end
 end
 
-#parseUsers('https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate')
-parseAccounts('https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address\Address1,Address\State,Address\City,Address\PostalCode,Createdate&format=json&count=500')
-parseTickets('https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution\notes,TicketProblem\notes,CreateDate,NeededByDate,ReceivedDate,Account\AccountName,AssignedTo\User\UserName&count=1000&format=json')
+#parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate&where=ModifyDate ge @" + Date.today.prev_day.strftime("%Y-%m-%d") + "@")
+#get Tickets and Accounts Modified in the last 5 mins
+d = Time.now
+d = d - 5 * 60
+d = d.iso8601
+puts d
+parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate%20ge%20@#{d}@&format=json&count=100")
+parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate%20ge%20@#{d}@%20or%20TicketProblem.ModifyDate%20ge%20@#{d}@%20or%20TicketSolution.ModifyDate%20ge%20@#{d}@&count=100&format=json")
+
+
+#Get Tickets and Accounts Modified in the last 3 months
+#parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&format=json&count=500")
+#parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&count=1000&format=json")

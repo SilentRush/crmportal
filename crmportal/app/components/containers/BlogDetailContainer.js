@@ -18,8 +18,8 @@ class BlogDetailContainer extends React.Component{
     if(this.props.params)
       blogId = this.props.params.blogid;
     blogApi.getBlog(blogId).then(()=>{
-      this.setState({commentList: <CommentListContainer isEdit={false} entityid={this.props.blog._id} type={"blog"} />});
       userApi.getUser(this.props.blog._source.userid);
+      this.setState({commentList: <CommentListContainer isEdit={false} entityid={this.props.blog._id} type={"blog"} />});
     });
 
   }
@@ -34,7 +34,7 @@ class BlogDetailContainer extends React.Component{
             <div className="commentsHeader">Comments</div>
             <div className="entityDetail">
               {this.state.commentList}
-              <CommentContainer isEdit={true} entityid={this.props.blog._id} type={"blog"} />
+              <CommentContainer isEdit={true} entityid={this.props.blog._id} type={"blog"} key={"InsertContainer"} />
             </div>
           </div>
         </div>

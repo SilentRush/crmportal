@@ -6,6 +6,9 @@ import AccountDetail from "../views/AccountDetail";
 import TicketMiniList from "../views/TicketMiniList";
 import CommentListContainer from "./CommentListContainer";
 import CommentContainer from "./CommentContainer";
+import {ChangeValue} from "../Utility/InputUtilities";
+import {addError,removeError} from "../Utility/ErrorUtilities";
+import {NotificationManager} from 'react-notifications';
 
 class AccountDetailContainer extends React.Component{
   constructor(props){
@@ -22,39 +25,56 @@ class AccountDetailContainer extends React.Component{
         accountid:'',
         accountname:'',
         address:{
+          addressid:'',
           streetaddress:'',
           zip:'',
           city:''
         },
         notes:''
-      }
+      },
+      errors:{}
     };
     this.clickShowNotes = this.clickShowNotes.bind(this);
-    this.changeAccount = (e) => {
-      var account = this.state.account;
-      account.accountname = e.target.value;
-      this.setState({account:account});
+    this.changeValue = (field,value) => {
+      var state = this.state;
+      state = ChangeValue(state,field,value);
+      if(state)
+        this.setState(state, this.isValid(()=>{
+          //Validity Callback
+        }));
+      else {
+        console.error("Unable to locate path: " + field + " in state.");
+      }
     }
-    this.changeStreetAddress = (e) => {
-      var account = this.state.account;
-      account.address.streetaddress = e.target.value;
-      this.setState({account:account});
+
+    this.isValid = (successCallback) => {
+      let nextState = Object.assign({},this.state);
+      nextState = Object.assign({}, this.validateAccountName(nextState));
+      this.setState(nextState,()=>{successCallback()});
+    };
+
+    this.saveAccount = () => {
+      this.isValid(()=> {
+        if(Object.keys(this.state.errors).length == 0){
+          accountApi.updateAccount(this.state.account).then(() => {
+            NotificationManager.success('Save Successful','',2500);
+          });
+        }
+      });
     }
-    this.changeZip = (e) => {
-      var account = this.state.account;
-      account.address.zip = e.target.value;
-      this.setState({account:account});
+  }
+
+  validateAccountName(state = 0){
+    let nextState
+    state ? nextState = Object.assign({},state) : nextState = Object.assign({},this.state);
+
+    if(!nextState.account.accountname || nextState.account.accountname == ""){
+      nextState = Object.assign({}, addError(nextState,"Account Name Missing", "accountname"));
     }
-    this.changeCity = (e) => {
-      var account = this.state.account;
-      account.address.city = e.target.value;
-      this.setState({account:account});
+    else{
+      nextState = Object.assign({}, removeError(nextState,"Account Name Missing", "accountname"));
     }
-    this.changeNotes = (e) => {
-      var account = this.state.account;
-      account.notes = e.target.value;
-      this.setState({account:account});
-    }
+    return nextState;
   }
 
   componentDidMount(){
@@ -76,21 +96,17 @@ class AccountDetailContainer extends React.Component{
   }
 
   render(){
-    if(this.state.accountid != '')
-      var account = this.state.account;
-    else
-      var account = this.props.account;
+
     return (
       <div className="row">
         <div className="col-sm-3 col-xs-12 col-md-3">
           <TicketMiniList tickets={this.props.tickets} currentIndex={this.state.currentIndex} clickPage={this.state.clickPage}  />
         </div>
         <div className="col-sm-9 col-xs-12 col-md-9">
-          <AccountDetail account={account}
-            changeNotes={this.changeNotes}
-            changeStreetAddress={this.changeStreetAddress}
-            changeCity={this.changeStreetAddress}
-            changeAccount={this.changeAccount}
+          <AccountDetail account={this.state.account}
+            changeValue={this.changeValue}
+            saveAccount={this.saveAccount}
+            errors={this.state.errors}
            />
           {this.commentList}
           <CommentContainer isEdit={true} entityid={this.props.account.accountid} type={"account"} />

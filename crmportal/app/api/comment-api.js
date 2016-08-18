@@ -1,16 +1,17 @@
 import axios from 'axios';
 import store from '../store';
-import instance from './connection-config'
 import { addCommentSuccess, getCommentsSuccess, getCommentSuccess, deleteCommentSuccess } from '../actions/comment-actions';
-import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
+import {apiBaseUrl} from './config';
+import {Logout} from '../components/Utility/Logout';
+
+axios.defaults.baseURL = apiBaseUrl;
 
 /**
  * Get all users
  */
- const API_ROOT = 'http://api.twilkislinux.sssworld-local.com/';
 
 export function getComments(type,entityid,from,size) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "from": from,
     "size": size,
@@ -26,6 +27,10 @@ export function getComments(type,entityid,from,size) {
     .then(function(response){
       let comments = response.data.hits;
       store.dispatch(getCommentsSuccess(comments));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -36,7 +41,6 @@ export function getComments(type,entityid,from,size) {
 export function addComment(comment) {
   comment.token = localStorage.token;
   comment.userid = localStorage.userid;
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
     url: '/comments',
@@ -47,13 +51,16 @@ export function addComment(comment) {
     })
     .catch(error => {
       console.log(error);
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
 export function updateComment(comment) {
   comment.token = localStorage.token;
   comment.userid = localStorage.userid;
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'put',
     url: '/comments/' + comment.commentid,
@@ -62,8 +69,9 @@ export function updateComment(comment) {
       let comment = response.data;
       //store.dispatch(addCommentSuccess(comment));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -72,7 +80,6 @@ export function updateComment(comment) {
  */
 
 export function searchComments(value,from,size) {
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
     url: '/search/comments',
@@ -87,8 +94,9 @@ export function searchComments(value,from,size) {
       let comments = response.data.hits;
       store.dispatch(getCommentsSuccess(comments));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -108,8 +116,9 @@ export function deleteComment(commentId) {
     .then(response => {
       store.dispatch(deleteCommentSuccess(response.data));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -119,7 +128,6 @@ export function deleteComment(commentId) {
  */
 
 export function getComment(commentId) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
@@ -129,5 +137,9 @@ export function getComment(commentId) {
     url:'/comments/' + commentId  + encodeObjectToUriString(params)
   }).then(function(response){
     store.dispatch(getCommentSuccess(response.data));
+  })
+  .catch(function(error){
+    if(error.status == 401)
+      Logout();
   });
 }

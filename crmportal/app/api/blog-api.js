@@ -1,16 +1,17 @@
 import axios from 'axios';
 import store from '../store';
-import instance from './connection-config'
 import { addBlogSuccess, getBlogsSuccess, getBlogSuccess, deleteBlogSuccess } from '../actions/blog-actions';
-import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper'
+import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
+import {apiBaseUrl} from './config';
+import {Logout} from '../components/Utility/Logout';
+
+axios.defaults.baseURL = apiBaseUrl;
 
 /**
  * Get all users
  */
- const API_ROOT = 'http://api.twilkislinux.sssworld-local.com/';
 
 export function getBlogs(from,size) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "from": from,
     "size": size,
@@ -22,9 +23,12 @@ export function getBlogs(from,size) {
     url: '/blogs' + encodeObjectToUriString(params)
    })
     .then(function(response){
-      console.log(response);
       let comments = response.data.hits;
       store.dispatch(getBlogsSuccess(comments));
+    })
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -35,7 +39,6 @@ export function getBlogs(from,size) {
 export function addBlog(blog) {
   blog.token = localStorage.token;
   blog.userid = localStorage.userid;
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
     url: '/blogs',
@@ -44,15 +47,15 @@ export function addBlog(blog) {
       let blog = response.data;
       store.dispatch(addBlogSuccess(blog));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
 export function updateBlog(blog) {
   comment.token = localStorage.token;
   comment.userid = localStorage.userid;
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'put',
     url: '/blogs/' + blog.blogid,
@@ -61,8 +64,9 @@ export function updateBlog(blog) {
       let blog = response.data;
       //store.dispatch(addCommentSuccess(comment));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -71,7 +75,6 @@ export function updateBlog(blog) {
  */
 
 export function searchBlogs(value,from,size) {
-  axios.defaults.baseURL = API_ROOT;
   return axios({
     method: 'post',
     url: '/search/blogs',
@@ -86,8 +89,9 @@ export function searchBlogs(value,from,size) {
       let blogs = response.data.hits;
       store.dispatch(getBlogsSuccess(blogs));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -107,8 +111,9 @@ export function deleteBlog(blogId) {
     .then(response => {
       store.dispatch(deleteBlogSuccess(response.data));
     })
-    .catch(error => {
-      console.log(error);
+    .catch(function(error){
+      if(error.status == 401)
+        Logout();
     });
 }
 
@@ -118,7 +123,6 @@ export function deleteBlog(blogId) {
  */
 
 export function getBlog(blogId) {
-  axios.defaults.baseURL = API_ROOT;
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
@@ -128,5 +132,9 @@ export function getBlog(blogId) {
     url:'/blogs/' + blogId  + encodeObjectToUriString(params)
   }).then(function(response){
     store.dispatch(getBlogSuccess(response.data));
+  })
+  .catch(function(error){
+    if(error.status == 401)
+      Logout();
   });
 }

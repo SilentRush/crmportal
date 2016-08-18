@@ -5,26 +5,18 @@ import {genKey} from "draft-js";
 
 export default class CommentList extends React.Component{
   constructor(props){
-    super();
-    this.createListItem = (comment) => this._createListItem(comment);
+    super(props);
   }
   render(){
+    var comments = this.props.comments.hits.map((comment) => {
+      return (
+        <CommentContainer comment={comment} commentid={comment._id} isEdit={false} isUpdate={true} key={comment._id} />
+      );
+    });
     return(
       <div>
-        {this.props.comments.hits.map((comment) => {
-          return <ListItemWrapper key={genKey()} comment={comment} />
-        })}
+          {comments}
       </div>
-    )
+    );
   }
 }
-
-var ListItemWrapper = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <CommentContainer comment={this.props.comment} commentid={this.props.comment._id} isEdit={false} isUpdate={true} />
-      </div>
-    )
-  }
-});

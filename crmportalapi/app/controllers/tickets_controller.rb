@@ -38,6 +38,48 @@ class TicketsController < ApplicationController
   end
 
   def update
+    uri = URI.parse("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets('" + params["ticketid"] + "')?format=json")
+    query = {
+      "$key" => params["ticketid"],
+      "TicketProblem" => {
+        "$key" => params["ticketid"],
+        "Notes" => params["ticketproblem"]
+      },
+      "TicketSolution" => {
+        "$key" => params["ticketid"],
+        "Notes" => params["ticketsolution"]
+      },
+      "Subject" => params["subject"]
+    }
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Put.new(uri.request_uri)
+    request['Authorization'] = params["saleslogixAuth"]
+    request['Content-Type'] = 'application/json'
+    request.body = query.to_json
+    response = http.request(request)
+
+    query = {
+      "doc" => {
+        "ticketproblem" => params["ticketproblem"],
+        "ticketsolution" => params["ticketsolution"],
+        "subject" => params["subject"],
+        "userid" => params["userid"],
+        "updatedate" => Time.now.to_datetime,
+        "slxupdatedate" => Time.now.to_datetime
+      }
+    }
+    url = "http://localhost:9200/xtivia/ticket/" + params["ticketid"] + "/_update"
+    uri = URI.parse(url)
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = query.to_json
+    request['Content-Type'] = 'application/json'
+    response = http.request(request)
+
+    body = JSON.parse(response.body)
   end
 
   def destroy

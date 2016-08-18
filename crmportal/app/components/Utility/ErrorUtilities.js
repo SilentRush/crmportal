@@ -37,6 +37,8 @@ export function addError(state,error,obj){
 }
 
 export function removeError(state,error,obj){
+  if(!state.errors)
+    state.errors = {};
   let errArr = state.errors;
   if(errArr[obj] && errArr[obj].indexOf(error) != -1){
     errArr[obj].splice(errArr[obj].indexOf(error),1);

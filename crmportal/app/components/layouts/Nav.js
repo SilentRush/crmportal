@@ -1,15 +1,12 @@
 import React from "react";
 import {Link, IndexLink, browserHistory, router} from "react-router";
+import {Logout} from '../Utility/Logout';
 
 export default class Nav extends React.Component{
   constructor (props,context){
     super(props);
     this.logout = () => {
-      localStorage.removeItem("firstname");
-      localStorage.removeItem("lastname");
-      localStorage.removeItem("userid");
-      localStorage.removeItem("username");
-      localStorage.removeItem("token");
+      Logout();
       this.context.router.push('/login');
     };
   }
@@ -48,7 +45,7 @@ export default class Nav extends React.Component{
               </ul>
               <form role="search" className="navbar-form navbar-right">
                   <div className="form-group">
-                      <input type="text" placeholder="Search" className="form-control" />
+                      <input type="text" placeholder="Search" className="form-control" readOnly="true" />
                   </div>
                   <button className="btn btn-danger" onClick={this.logout}><span className="glyphicon glyphicon-log-out">Logout</span></button>
               </form>

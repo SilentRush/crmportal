@@ -7,7 +7,6 @@ import {TextToInputGroup} from "../Utility/InputGroup";
 export default class BlogDetail extends React.Component{
   constructor(props){
     super(props);
-    console.log(props);
   }
   render(){
     var textEditor, blogDetails, blog, thumbnailImg,editBtn,delBtn

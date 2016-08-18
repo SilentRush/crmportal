@@ -14,7 +14,7 @@ export default class Comment extends React.Component{
     if(this.props.comment){
       const {createdate,userid,updatedate} = this.props.comment._source;
       const {firstname, lastname} = this.props.user._source;
-      header = <span>Posted By: <Link to={"users/" + userid}>{firstname + " " + lastname}</Link></span>;
+      header = <span>Posted By: <Link to={"/users/" + userid}>{firstname + " " + lastname}</Link></span>;
       let Createdate = new Date(createdate);
       let Updatedate = new Date(updatedate);
       if(localStorage.userid == userid){

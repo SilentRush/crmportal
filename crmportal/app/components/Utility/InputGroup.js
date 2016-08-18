@@ -14,39 +14,48 @@ export class TextToInputGroup extends React.Component{
   }
 
   render (){
-    var inputGroup, error,input;
+    var inputGroup, error,input, value;
+    if(!this.props.value)
+      value = '';
+    else
+      value = this.props.value;
     if(this.props.errors)
       error = ErrorBox(this.props.errors);
     if(this.props.useTextArea)
-      input = <textarea type="text" value={this.props.value} rows="10" onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput}></textarea>
+      input = <textarea type="text" value={value} readOnly={this.props.readOnly} rows={this.props.rows} onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput}></textarea>
     else
-      input = <input type="text" value={this.props.value} onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput} />
+      input = <input type="text" value={value} readOnly={this.props.readOnly} onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput} />
     if(this.state.showInput){
       inputGroup = (
-        <div>
+        <span>
           <div className="input-group">
             <span className="input-group-addon">{this.props.label}</span>
             {input}
           </div>
           {error}
-        </div>
+        </span>
       );
     }
     else{
+      if(value == '')
+        value = 'PLACEHOLDER';
       if(this.props.showLabel)
         var label = <label>{this.props.label}</label>;
       inputGroup = (
-        <span onClick={this.toggleInput}>
-          {label}
-          <p>{this.props.value}</p>
+        <span>
+          <span onClick={this.toggleInput}>
+            {label}
+            {value}
+          </span>
+          {error}
         </span>
       );
     }
 
     return(
-      <div>
+      <span>
         {inputGroup}
-      </div>
+      </span>
     );
   }
 }
@@ -58,13 +67,17 @@ export class InputGroup extends React.Component{
   }
 
   render (){
-    var error, input;
+    var error, input,value;
+    if(!this.props.value)
+      value = '';
+    else
+      value = this.props.value;
     if(this.props.errors)
       error = ErrorBox(this.props.errors);
     if(this.props.useTextArea)
-      input = <textarea type="text" value={this.props.value} rows="10" onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput}></textarea>
+      input = <textarea type="text" value={value} readOnly={this.props.readOnly} rows={this.props.rows} onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput}></textarea>
     else
-      input = <input type="text" value={this.props.value} onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput} />
+      input = <input type="text" value={value} readOnly={this.props.readOnly} onChange={this.props.onChange} className={"form-control " + this.props.classes} onBlur={this.toggleInput} />
 
     return(
       <div>
