@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   def create
     user = params["user"]
     user["token"] = SecureRandom.base64(64)
-    url = 'http://localhost:9200/xtivia/user/' + user["userid"]
+    url = 'http://localhost:9200/xtivia/user/' + user["userid"].to_s + "/_update"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Put.new(uri.request_uri)

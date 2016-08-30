@@ -21,7 +21,10 @@ const initialState = {
   },
   account: {
     address:{}
-  }
+  },
+  accountnames: [
+
+  ]
 };
 
 const accountReducer = function(state = initialState, action) {
@@ -33,6 +36,9 @@ const accountReducer = function(state = initialState, action) {
 
     case types.GET_ACCOUNT_SUCCESS:
       return Object.assign({}, state, { account: action.account });
+
+    case types.GET_ACCOUNTNAMES_SUCCESS:
+      return Object.assign({}, state, { accountnames: action.accountnames });
 
   }
 

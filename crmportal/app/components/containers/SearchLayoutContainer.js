@@ -12,8 +12,14 @@ const mapStateToProps = function(store) {
   if (searchType === 'accounts') {
     totalResults = store.accountState.accounts.hits.length;
   }
+  if (searchType === 'contacts') {
+    totalResults = store.contactState.contacts.hits.length;
+  }
   if (searchType === 'blogs') {
     totalResults = store.blogState.blogs.hits.length;
+  }
+  if (searchType === 'histories') {
+    totalResults = store.historyState.histories.hits.length;
   }
   return {
     searchType,

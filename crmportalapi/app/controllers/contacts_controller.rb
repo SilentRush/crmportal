@@ -2,9 +2,9 @@ require 'net/http'
 require "uri"
 require "json"
 
-class AccountsController < ApplicationController
+class ContactsController < ApplicationController
   def index
-    url = "http://localhost:9200/xtivia/account/_search/?size=" + params["size"] + "&from=" + params["from"] + "&sort=accountname.raw:asc"
+    url = "http://localhost:9200/xtivia/contact/_search/?size=" + params["size"] + "&from=" + params["from"] + "&sort=slxcreatedate:asc"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -23,7 +23,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    url = "http://localhost:9200/xtivia/account/" + params["id"]
+    url = "http://localhost:9200/xtivia/contact/" + params["id"]
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -37,21 +37,21 @@ class AccountsController < ApplicationController
     render json: body
   end
 
-  def getAccountNames
+  def getContactNames
     query = {
       "_source"=> false,
       "aggs" => {
-        "accountnames" => {
+        "contactnames" => {
           "terms" =>
             {
-              "field"=>"accountname.raw",
+              "field"=>"contactname.raw",
               "size"=> 0
             }
         }
       }
     }
 
-    url = "http://localhost:9200/xtivia/account/_search"
+    url = "http://localhost:9200/xtivia/contact/_search"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -66,10 +66,10 @@ class AccountsController < ApplicationController
   end
 
   def update
-    uri = URI.parse("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts('" + params["accountid"] + "')?format=json")
+    uri = URI.parse("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts('" + params["contactid"] + "')?format=json")
     query = {
-      "$key" => params["accountid"],
-      "AccountName" => params["accountname"],
+      "$key" => params["contactid"],
+      "ContactName" => params["contactname"],
       "Notes" => params["notes"]
     }
     http = Net::HTTP.new(uri.host, uri.port)
@@ -83,14 +83,14 @@ class AccountsController < ApplicationController
 
     query = {
       "doc" => {
-        "accountname" => params["accountname"],
+        "contactname" => params["contactname"],
         "notes" => params["notes"],
         "userid" => params["userid"],
         "updatedate" => Time.now.to_datetime,
         "slxupdatedate" => Time.now.to_datetime
       }
     }
-    url = "http://localhost:9200/xtivia/account/" + params["accountid"] + "/_update"
+    url = "http://localhost:9200/xtivia/contact/" + params["contactid"] + "/_update"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)
@@ -113,7 +113,7 @@ class AccountsController < ApplicationController
             {
               "multi_match":{
                 "query" => "#{params["value"]}",
-                "fields" => ["accountname"]
+                "fields" => ["contactname","accountname"]
               }
             }
           ]
@@ -127,6 +127,7 @@ class AccountsController < ApplicationController
           "</em>"
         ],
         "fields" => {
+            "contactname":{"number_of_fragments":0},
             "accountname":{"number_of_fragments":0}
         }
       },
@@ -143,7 +144,7 @@ class AccountsController < ApplicationController
       query["from"] = params["from"]
     end
 
-    url = "http://localhost:9200/xtivia/account/_search"
+    url = "http://localhost:9200/xtivia/contact/_search"
     uri = URI.parse(url)
 
     http = Net::HTTP.new(uri.host, uri.port)

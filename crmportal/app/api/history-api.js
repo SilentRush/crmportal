@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { getAccountsSuccess, getAccountSuccess, getAccountNamesSuccess } from '../actions/account-actions';
+import { getHistoriesSuccess, getHistorySuccess } from '../actions/history-actions';
 import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
 import {apiBaseUrl} from './config';
 import {Logout} from '../components/Utility/Logout';
@@ -10,7 +10,7 @@ axios.defaults.baseURL = apiBaseUrl;
  * Get all users
  */
 
-export function getAccounts(from,size) {
+export function getHistories(from,size) {
   let params = {
     "from": from,
     "size": size,
@@ -19,28 +19,10 @@ export function getAccounts(from,size) {
   };
   return axios({
     method: 'get',
-    url:'/accounts' + encodeObjectToUriString(params)
+    url:'/histories' + encodeObjectToUriString(params)
   })
   .then(function(response){
-    store.dispatch(getAccountsSuccess(response.data.hits));
-  })
-  .catch(function(error){
-    if(error.status == 401)
-      Logout();
-  });
-}
-
-export function getAccountNames(){
-  let params = {
-    "token": localStorage.token,
-    "userid": localStorage.userid
-  };
-  return axios({
-    method: 'get',
-    url:'/getAccountNames' + encodeObjectToUriString(params)
-  })
-  .then(function(response){
-    store.dispatch(getAccountNamesSuccess(response.data.aggregations.accountnames.buckets.map((name)=>{return name.key})));
+    store.dispatch(getHistoriesSuccess(response.data.hits));
   })
   .catch(function(error){
     if(error.status == 401)
@@ -49,16 +31,16 @@ export function getAccountNames(){
 }
 
 
-export function updateAccount(account) {
-  account.token = localStorage.token;
-  account.userid = localStorage.userid;
-  account.saleslogixAuth = localStorage.saleslogixAuth;
+export function updateHistory(history) {
+  history.token = localStorage.token;
+  history.userid = localStorage.userid;
+  history.saleslogixAuth = localStorage.saleslogixAuth;
   return axios({
     method: 'put',
-    url: '/accounts/' + account.accountid,
-    data: account})
+    url: '/histories/' + history.historyid,
+    data: history})
     .then(response => {
-      let account = response.data;
+      let history = response.data;
       //store.dispatch(addCommentSuccess(comment));
     })
     .catch(function(error){
@@ -71,20 +53,33 @@ export function updateAccount(account) {
  * Search users
  */
 
-export function searchAccounts(value,from,size) {
+export function searchHistories(value,account,contact,from,size) {
+  let Value,Account,Contact,From,Size;
+  if(value)
+    Value = value.toString();
+  if(account)
+    Account = account.toString();
+  if(contact)
+    Contact = contact.toString();
+  if(from)
+    From = from.toString();
+  if(size)
+    Size = size.toString();
   return axios({
       method: 'post',
-      url: '/search/accounts',
+      url: '/search/histories',
       data: {
-      "value":value.toString(),
-      "from":from.toString(),
-      "size":size.toString(),
+      "value":Value,
+      "account":Account,
+      "contact":Contact,
+      "from":From,
+      "size":Size,
       "userid": localStorage.userid.toString(),
       "token": localStorage.token.toString()
     }})
     .then(response => {
-      let accounts = response.data.hits;
-      store.dispatch(getAccountsSuccess(accounts));
+      let histories = response.data.hits;
+      store.dispatch(getHistoriesSuccess(histories));
     })
     .catch(function(error){
       if(error.status == 401)
@@ -113,16 +108,16 @@ export function deleteUser(userId) {
  * three XHR requests to get all the profile info.
  */
 
-export function getAccount(accountId) {
+export function getHistory(historyId) {
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
   };
   return axios({
     method: 'get',
-    url:'/accounts/' + accountId + encodeObjectToUriString(params)
+    url:'/histories/' + historyId + encodeObjectToUriString(params)
   }).then(function(response){
-    store.dispatch(getAccountSuccess(response.data._source));
+    store.dispatch(getHistorySuccess(response.data._source));
   })
   .catch(function(error){
     if(error.status == 401)

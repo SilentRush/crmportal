@@ -11,5 +11,12 @@ export function getAccountSuccess(account) {
   return {
     type: types.GET_ACCOUNT_SUCCESS,
     account: account
-  };
+  }
+}
+
+export function getAccountNamesSuccess(accountnames) {
+  return {
+    type: types.GET_ACCOUNTNAMES_SUCCESS,
+    accountnames: accountnames
+  }
 }

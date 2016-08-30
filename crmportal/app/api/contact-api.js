@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store';
-import { getAccountsSuccess, getAccountSuccess, getAccountNamesSuccess } from '../actions/account-actions';
+import { getContactsSuccess, getContactSuccess, getContactNamesSuccess } from '../actions/contact-actions';
 import {encodeObjectToUriString} from '../components/Utility/AuthenticationWrapper';
 import {apiBaseUrl} from './config';
 import {Logout} from '../components/Utility/Logout';
@@ -10,7 +10,7 @@ axios.defaults.baseURL = apiBaseUrl;
  * Get all users
  */
 
-export function getAccounts(from,size) {
+export function getContacts(from,size) {
   let params = {
     "from": from,
     "size": size,
@@ -19,10 +19,10 @@ export function getAccounts(from,size) {
   };
   return axios({
     method: 'get',
-    url:'/accounts' + encodeObjectToUriString(params)
+    url:'/contacts' + encodeObjectToUriString(params)
   })
   .then(function(response){
-    store.dispatch(getAccountsSuccess(response.data.hits));
+    store.dispatch(getContactsSuccess(response.data.hits));
   })
   .catch(function(error){
     if(error.status == 401)
@@ -30,17 +30,17 @@ export function getAccounts(from,size) {
   });
 }
 
-export function getAccountNames(){
+export function getContactNames(){
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
   };
   return axios({
     method: 'get',
-    url:'/getAccountNames' + encodeObjectToUriString(params)
+    url:'/getContactNames' + encodeObjectToUriString(params)
   })
   .then(function(response){
-    store.dispatch(getAccountNamesSuccess(response.data.aggregations.accountnames.buckets.map((name)=>{return name.key})));
+    store.dispatch(getContactNamesSuccess(response.data.aggregations.contactnames.buckets.map((name)=>{return name.key})));
   })
   .catch(function(error){
     if(error.status == 401)
@@ -49,16 +49,16 @@ export function getAccountNames(){
 }
 
 
-export function updateAccount(account) {
-  account.token = localStorage.token;
-  account.userid = localStorage.userid;
-  account.saleslogixAuth = localStorage.saleslogixAuth;
+export function updateContact(contact) {
+  contact.token = localStorage.token;
+  contact.userid = localStorage.userid;
+  contact.saleslogixAuth = localStorage.saleslogixAuth;
   return axios({
     method: 'put',
-    url: '/accounts/' + account.accountid,
-    data: account})
+    url: '/contacts/' + contact.contactid,
+    data: contact})
     .then(response => {
-      let account = response.data;
+      let contact = response.data;
       //store.dispatch(addCommentSuccess(comment));
     })
     .catch(function(error){
@@ -71,10 +71,10 @@ export function updateAccount(account) {
  * Search users
  */
 
-export function searchAccounts(value,from,size) {
+export function searchContacts(value,from,size) {
   return axios({
       method: 'post',
-      url: '/search/accounts',
+      url: '/search/contacts',
       data: {
       "value":value.toString(),
       "from":from.toString(),
@@ -83,8 +83,8 @@ export function searchAccounts(value,from,size) {
       "token": localStorage.token.toString()
     }})
     .then(response => {
-      let accounts = response.data.hits;
-      store.dispatch(getAccountsSuccess(accounts));
+      let contacts = response.data.hits;
+      store.dispatch(getContactsSuccess(contacts));
     })
     .catch(function(error){
       if(error.status == 401)
@@ -113,16 +113,16 @@ export function deleteUser(userId) {
  * three XHR requests to get all the profile info.
  */
 
-export function getAccount(accountId) {
+export function getContact(contactId) {
   let params = {
     "token": localStorage.token,
     "userid": localStorage.userid
   };
   return axios({
     method: 'get',
-    url:'/accounts/' + accountId + encodeObjectToUriString(params)
+    url:'/contacts/' + contactId + encodeObjectToUriString(params)
   }).then(function(response){
-    store.dispatch(getAccountSuccess(response.data._source));
+    store.dispatch(getContactSuccess(response.data._source));
   })
   .catch(function(error){
     if(error.status == 401)

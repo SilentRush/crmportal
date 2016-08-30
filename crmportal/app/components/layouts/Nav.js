@@ -15,6 +15,8 @@ export default class Nav extends React.Component{
     const homeClass = location.pathname === "/" ? "active" : "";
     const ticketsClass = location.pathname.match(/^\/tickets/) ? "active" : "";
     const accountsClass = location.pathname.match(/^\/accounts/) ? "active" : "";
+    const contactsClass = location.pathname.match(/^\/contacts/) ? "active" : "";
+    const historyClass = location.pathname.match(/^\/histories/) ? "active" : "";
     const blogsClass = location.pathname.match(/^\/blogs/) ? "active" : "";
 
     return (
@@ -32,6 +34,8 @@ export default class Nav extends React.Component{
                     <ul className="dropdown-menu">
                       <li className={ticketsClass}><Link to="/tickets">Tickets</Link></li>
                       <li className={accountsClass}><Link to="/accounts">Accounts</Link></li>
+                      <li className={contactsClass}><Link to="/contacts">Contacts</Link></li>
+                      <li className={historyClass}><Link to="/histories">Notes History</Link></li>
                     </ul>
                 </li>
                 <li className="dropdown">

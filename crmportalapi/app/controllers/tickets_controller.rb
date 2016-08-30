@@ -91,31 +91,30 @@ class TicketsController < ApplicationController
         "bool" => {
           "should" => [
             {
-              "match":{
-                "account.accountname" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "ticketproblem" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "ticketsolution" => "#{params["value"]}"
-              }
-            },
-            {
-              "match":{
-                "assignedto.username" => "#{params["value"]}"
+              "multi_match":{
+                "query" => "#{params["value"]}",
+                "fields" => ["subject","ticketproblem","ticketsolution","assignedto.username"]
               }
             }
           ]
         }
       },
+      "highlight" => {
+        "pre_tags" => [
+          "<em>"
+        ],
+        "post_tags" => [
+          "</em>"
+        ],
+        "fields" => {
+            "subject":{"number_of_fragments":0},
+            "ticketproblem":{"number_of_fragments":0},
+            "ticketsolution":{"number_of_fragments":0},
+            "assignedto.username":{"number_of_fragments":0}
+        }
+      },
       "sort":[
-        "_score",
-        {"slxupdatedate" => {"order"=>"desc"}}
+        "_score"
       ]
     }
 

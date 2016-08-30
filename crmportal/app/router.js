@@ -10,6 +10,10 @@ import TicketListContainer from "./components/containers/TicketListContainer";
 import TicketDetailContainer from "./components/containers/TicketDetailContainer";
 import AccountListContainer from "./components/containers/AccountListContainer";
 import AccountDetailContainer from "./components/containers/AccountDetailContainer";
+import ContactListContainer from "./components/containers/ContactListContainer";
+import ContactDetailContainer from "./components/containers/ContactDetailContainer";
+import HistoryListContainer from "./components/containers/HistoryListContainer";
+import HistoryDetailContainer from "./components/containers/HistoryDetailContainer";
 import BlogListContainer from "./components/containers/BlogListContainer";
 import BlogDetailContainer from "./components/containers/BlogDetailContainer";
 import BlogInsertContainer from "./components/containers/BlogInsertContainer";
@@ -43,11 +47,17 @@ export default (
         </Route>
         <Route path="accounts" component={AccountListContainer}>
         </Route>
+        <Route path="contacts" component={ContactListContainer}>
+        </Route>
         <Route path="blogs" component={BlogListContainer}>
+        </Route>
+        <Route path="histories" component={HistoryListContainer}>
         </Route>
       </Route>
       <Route path="/ticket/:ticketid" component={TicketDetailContainer}></Route>
       <Route path="/account/:accountid" component={AccountDetailContainer}></Route>
+      <Route path="/contact/:contactid" component={ContactDetailContainer}></Route>
+      <Route path="/history/:historyid" component={HistoryDetailContainer}></Route>
       <Route path="/blog/:blogid" component={BlogDetailContainer}></Route>
       <Route path="insert/blog" component={InsertBlogWrapper}></Route>
       <Route path="update/blog" component={UpdateBlogWrapper}></Route>

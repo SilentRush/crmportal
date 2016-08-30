@@ -35,7 +35,7 @@ def parseUsers(url)
       "doc_as_upsert" => true
     }
     puts currUser.to_json
-    url = "http://api.twilkislinux.sssworld-local.com/user/" + user["$key"].to_s + "/_update"
+    url = "http://api.twilkislinux.sssworld-local.com/user/"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
@@ -264,17 +264,9 @@ def parseHistory(url)
 end
 
 
-#parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate&where=ModifyDate ge @" + Date.today.prev_day.strftime("%Y-%m-%d") + "@")
-#get Tickets and Accounts Modified in the last 5 mins
-d = Time.now
-d = d - 3 * 60
-d = d.iso8601
-puts d
-parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate%20ge%20@#{d}@&format=json&count=100")
-parseContacts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts?include=Account&select=contactid,FirstName,LastName,NameLF,Name,Createdate,Account/$key,Account/AccountName&where=ModifyDate%20ge%20@#{d}@&format=json&count=500")
-parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate%20ge%20@#{d}@%20or%20TicketProblem.ModifyDate%20ge%20@#{d}@%20or%20TicketSolution.ModifyDate%20ge%20@#{d}@&count=100&format=json")
-parseHistory("https://slxweb.sssworld.com/sdata/slx/dynamic/-/history?format=json&count=500&where=ModifyDate%20ge%20@#{d}@")
-
-#Get Tickets and Accounts Modified in the last 3 months
+#parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate")
+#parseHistory("https://slxweb.sssworld.com/sdata/slx/dynamic/-/history?format=json&count=500&startIndex=206000")
+parseContacts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts?include=Account&select=contactid,FirstName,LastName,NameLF,Name,Createdate,Account/$key,Account/AccountName&format=json&count=500")
+#Get Tickets and Accounts Modified in the last month
 #parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&format=json&count=500")
-#parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&count=1000&format=json")
+#parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketProblem.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketSolution.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&count=1000&format=json")

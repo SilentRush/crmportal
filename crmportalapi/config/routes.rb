@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :tickets
   resources :accounts
+  resources :contacts
+  resources :histories
   resources :comments
   resources :blogs
   resources :users
@@ -16,7 +18,11 @@ Rails.application.routes.draw do
   post '/search/tickets', to: 'tickets#search'
   get '/search/ticket/account/:accountid', to: 'tickets#getAccountTickets'
 
+  get '/getAccountNames', to: 'accounts#getAccountNames'
   post '/search/accounts', to: 'accounts#search'
+  get '/getContactNames', to: 'contacts#getContactNames'
+  post '/search/contacts', to: 'contacts#search'
+  post '/search/histories', to: 'histories#search'
 
   post '/search/comments', to: 'comments#search'
 
