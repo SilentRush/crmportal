@@ -5,6 +5,8 @@ require "json"
 require "date"
 require "time"
 
+@count = 0
+
 def parseUsers(url)
   uri = URI.parse(url)
 
@@ -108,7 +110,10 @@ def parseContacts(url)
   body = JSON.parse(response.body)
 
   contacts = body["$resources"]
+  @count = @count + body["$resources"].length
   contacts.each do |contact|
+    cd = Time.at(/(\d+)/.match(contact["CreateDate"])[0].to_i/1000).to_datetime if(!contact["CreateDate"].nil?)
+    ud = Time.at(/(\d+)/.match(contact["$updated"])[0].to_i/1000).to_datetime if(!contact["$updated"].nil?)
     currContact = {
       "doc" => {
         "contactid" => contact["$key"],
@@ -118,8 +123,8 @@ def parseContacts(url)
         "firstname" => contact["FirstName"],
         "lastname" => contact["LastName"],
         "fullname" => contact["Name"],
-        "slxcreatedate" => Time.at(/(\d+)/.match(contact["CreateDate"])[0].to_i/1000).to_datetime,
-        "slxupdatedate" => Time.at(/(\d+)/.match(contact["$updated"])[0].to_i/1000).to_datetime,
+        "slxcreatedate" => cd,
+        "slxupdatedate" => ud,
         "createdate" => Time.now.to_datetime,
         "updatedate" => Time.now.to_datetime
       },
@@ -131,6 +136,10 @@ def parseContacts(url)
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = currContact.to_json
     response = http.request(request)
+    if(contact["$key"] == "CKBESA20001A")
+        puts currContact["doc"].to_s
+        break
+    end
     puts response.body
   end
 
@@ -266,7 +275,8 @@ end
 
 #parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate")
 #parseHistory("https://slxweb.sssworld.com/sdata/slx/dynamic/-/history?format=json&count=500&startIndex=206000")
-parseContacts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts?include=Account&select=contactid,FirstName,LastName,NameLF,Name,Createdate,Account/$key,Account/AccountName&format=json&count=500")
+parseContacts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts?include=Account&select=contactid,FirstName,LastName,NameLF,Name,Createdate,Account/$key,Account/AccountName&format=json&count=100")
+puts @count
 #Get Tickets and Accounts Modified in the last month
 #parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&format=json&count=500")
 #parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketProblem.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketSolution.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&count=1000&format=json")

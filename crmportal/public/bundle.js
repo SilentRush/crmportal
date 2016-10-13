@@ -49365,12 +49365,47 @@
 	      }
 	      if (_this.props.searchType === 'histories') {
 	        var q = [];
-	        if (_this.state.historyQuery.account) q.push("a=" + _this.state.historyQuery.account);
-	        if (_this.state.historyQuery.contact) q.push("c=" + _this.state.historyQuery.contact);
-	        if (query) historyApi.searchHistories(query, _this.state.historyQuery.account, _this.state.historyQuery.contact, 0, 40).then(function () {
+	        if (_this.state.historyQuery.account) {
+	          if (_this.state.historyQuery.account instanceof Array) {
+	            var a = _this.state.historyQuery.account.map(function (acc) {
+	              q.push("a=" + acc);
+	              return;
+	            });
+	          } else {
+	            q.push("a=" + _this.state.historyQuery.account);
+	          }
+	        }
+	        if (_this.state.historyQuery.contact) {
+	          if (_this.state.historyQuery.contact instanceof Array) {
+	            var c = _this.state.historyQuery.contact.map(function (con) {
+	              q.push("c=" + con);
+	              return;
+	            });
+	          } else {
+	            q.push("c=" + _this.state.historyQuery.contact);
+	          }
+	        }
+	        var accQuery = '',
+	            conQuery = '';
+	        if (_this.state.historyQuery.account) {
+	          if (_this.state.historyQuery.account instanceof Array) {
+	            accQuery = _this.state.historyQuery.account.join(" ");
+	          } else {
+	            accQuery = _this.state.historyQuery.account;
+	          }
+	        }
+	        if (_this.state.historyQuery.contact) {
+	          if (_this.state.historyQuery.contact instanceof Array) {
+	            conQuery = _this.state.historyQuery.contact.join(" ");
+	          } else {
+	            conQuery = _this.state.historyQuery.contact;
+	          }
+	        }
+
+	        if (query) historyApi.searchHistories(query, accQuery, conQuery, 0, 40).then(function () {
 	          if (q.length > 0) _this.context.router.push('/histories?q=' + query + "&" + q.join("&"));else _this.context.router.push('/histories?q=' + query);
 	        });else {
-	          historyApi.searchHistories('', _this.state.historyQuery.account, _this.state.historyQuery.contact, 0, 40).then(function () {
+	          historyApi.searchHistories('', accQuery, conQuery, 0, 40).then(function () {
 	            if (q.length > 0) _this.context.router.push('/histories?' + q.join("&"));else _this.context.router.push('/histories');
 	          });
 	        }
@@ -49383,29 +49418,92 @@
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(props) {
 	      var query = props.location.query.q;
-	      var state = Object.assign({}, this.state);
-	      if (query) state.query = query;else state.query = '';
-	      if (this.props.searchType === 'tickets') {
+	      var a = this.state.historyQuery.account,
+	          c = this.state.historyQuery.contact;
+	      if (query) query = query;else query = '';
+	      if (props.searchType === 'tickets') {
 	        if (query) ticketApi.searchTickets(query, 0, 40);else ticketApi.getTickets(0, 40);
 	      }
-	      if (this.props.searchType === 'accounts') {
+	      if (props.searchType === 'accounts') {
 	        if (query) accountApi.searchAccounts(query, 0, 40);else accountApi.getAccounts(0, 40);
 	      }
-	      if (this.props.searchType === 'contacts') {
+	      if (props.searchType === 'contacts') {
 	        if (query) contactApi.searchContacts(query, 0, 40);else contactApi.getContacts(0, 40);
 	      }
-	      if (this.props.searchType === 'blogs') {
+	      if (props.searchType === 'blogs') {
 	        if (query) blogApi.searchBlogs(query, 0, 40);else blogApi.getBlogs(0, 40);
 	      }
-	      if (this.props.searchType === 'histories') {
+	      if (props.searchType === 'histories') {
 	        var exParams = [];
 	        if (props.location.query.a) {
 	          exParams.push(props.location.query.a);
+	          a = props.location.query.a;
 	        }
-	        if (props.location.query.c) exParams.push(props.location.query.c);
-	        if (query) historyApi.searchHistories(query, props.location.query.a, props.location.query.c, 0, 40);else if (exParams.length > 0) historyApi.searchHistories('', props.location.query.a, props.location.query.c, 0, 40);else historyApi.getHistories(0, 40);
+	        if (props.location.query.c) {
+	          exParams.push(props.location.query.c);
+	          c = props.location.query.c;
+	        }
+	        var accQuery = '',
+	            conQuery = '';
+	        if (props.location.query.a) {
+	          if (props.location.query.a instanceof Array) accQuery = props.location.query.a.join(" ");else accQuery = props.location.query.a;
+	        }
+	        if (props.location.query.c) {
+	          if (props.location.query.c instanceof Array) conQuery = props.location.query.c.join(" ");else conQuery = props.location.query.c;
+	        }
+
+	        if (query) historyApi.searchHistories(query, accQuery, conQuery, 0, 40);else if (exParams.length > 0) historyApi.searchHistories('', accQuery, conQuery, 0, 40);else historyApi.getHistories(0, 40);
 	      }
-	      this.setState(state);
+	      var historyQuery = {};
+	      historyQuery.account = a;
+	      historyQuery.contact = c;
+	      this.setState({ query: query, historyQuery: historyQuery });
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var props = this.props;
+	      var query = props.location.query.q;
+	      var a = this.state.historyQuery.account,
+	          c = this.state.historyQuery.contact;
+	      if (query) query = query;else query = '';
+	      if (props.searchType === 'tickets') {
+	        if (query) ticketApi.searchTickets(query, 0, 40);else ticketApi.getTickets(0, 40);
+	      }
+	      if (props.searchType === 'accounts') {
+	        if (query) accountApi.searchAccounts(query, 0, 40);else accountApi.getAccounts(0, 40);
+	      }
+	      if (props.searchType === 'contacts') {
+	        if (query) contactApi.searchContacts(query, 0, 40);else contactApi.getContacts(0, 40);
+	      }
+	      if (props.searchType === 'blogs') {
+	        if (query) blogApi.searchBlogs(query, 0, 40);else blogApi.getBlogs(0, 40);
+	      }
+	      if (props.searchType === 'histories') {
+	        var exParams = [];
+	        if (props.location.query.a) {
+	          exParams.push(props.location.query.a);
+	          a = props.location.query.a;
+	        }
+	        if (props.location.query.c) {
+	          exParams.push(props.location.query.c);
+	          c = props.location.query.c;
+	        }
+	        var accQuery = '',
+	            conQuery = '';
+	        if (props.location.query.a) {
+	          if (props.location.query.a instanceof Array) accQuery = props.location.query.a.join(" ");else accQuery = props.location.query.a;
+	        }
+	        if (props.location.query.c) {
+	          if (props.location.query.c instanceof Array) conQuery = props.location.query.c.join(" ");else conQuery = props.location.query.c;
+	        }
+
+	        if (query) historyApi.searchHistories(query, accQuery, conQuery, 0, 40);else if (exParams.length > 0) historyApi.searchHistories('', accQuery, conQuery, 0, 40);else historyApi.getHistories(0, 40);
+	      }
+	      var historyQuery = {};
+	      historyQuery.account = a;
+	      historyQuery.contact = c;
+	      this.setState({ query: query, historyQuery: historyQuery });
 	    }
 	  }, {
 	    key: 'render',
@@ -49417,7 +49515,8 @@
 	        onChangeHistoryQuery: this.onChangeHistoryQuery,
 	        historyQuery: this.state.historyQuery,
 	        query: this.state.query,
-	        ref: 'child'
+	        ref: 'child',
+	        location: this.props.location
 	      });
 	    }
 	  }]);
@@ -50404,7 +50503,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, props));
 
 	    _this.onChangeQuery = function (value) {
-	      _this.props.onChangeQuery(value.target.value);
+	      _this.props.onChangeQuery(value);
 	    };
 	    return _this;
 	  }
@@ -50412,13 +50511,16 @@
 	  _createClass(_class, [{
 	    key: 'getSearchForm',
 	    value: function getSearchForm() {
+	      var _this2 = this;
+
 	      if (this.props.searchType == "histories") {
 	        return _react2.default.createElement(_HistorySearchForm2.default, {
 	          onChangeQuery: this.onChangeQuery,
 	          query: this.props.query,
 	          onChangeHistoryQuery: this.props.onChangeHistoryQuery,
 	          historyQuery: this.props.historyQuery,
-	          search: this.props.search
+	          search: this.props.search,
+	          location: this.props.location
 	        });
 	      } else {
 	        return _react2.default.createElement(
@@ -50427,7 +50529,9 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'input-group' },
-	            _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'search', placeholder: 'Search', value: this.props.query, onChange: this.onChangeQuery }),
+	            _react2.default.createElement('input', { type: 'text', className: 'form-control', ref: 'search', placeholder: 'Search', value: this.props.query, onChange: function onChange(e) {
+	                _this2.onChangeQuery(e.target.value);
+	              } }),
 	            _react2.default.createElement(
 	              'span',
 	              { className: 'input-group-btn' },
@@ -50504,7 +50608,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HistorySearchForm).call(this, props));
 
 	    _this.state = { selectedAccountNames: [], accountNamesArr: [], currAccountText: '',
-	      selectedContactNames: [], contactNamesArr: [], currContactText: '' };
+	      selectedContactNames: [], contactNamesArr: [], currContactText: '', query: props.query };
 	    _this.onChangeHistoryQuery = function (value, key) {
 	      var obj = _this.props.historyQuery;
 	      obj[key] = value;
@@ -50533,7 +50637,7 @@
 	      var arr = _this.state.accountNamesArr;
 	      arr.push(name);
 	      _this.setState({ accountNamesArr: arr, selectedAccountNames: [], currAccountText: '' }, function () {
-	        _this.onChangeHistoryQuery(_this.state.accountNamesArr.join(" "), "account");
+	        _this.onChangeHistoryQuery(_this.state.accountNamesArr, "account");
 	      });
 	    };
 	    _this.updateAccountList = function (value) {
@@ -50565,7 +50669,7 @@
 	      var arr = _this.state.contactNamesArr;
 	      arr.push(name);
 	      _this.setState({ contactNamesArr: arr, selectedContactNames: [], currContactText: '' }, function () {
-	        _this.onChangeHistoryQuery(_this.state.contactNamesArr.join(" "), "contact");
+	        _this.onChangeHistoryQuery(_this.state.contactNamesArr, "contact");
 	      });
 	    };
 	    _this.updateContactList = function (value) {
@@ -50573,7 +50677,6 @@
 	        _this.onChangeHistoryQuery(_this.state.contactNamesArr.join(" "), "contact");
 	      });
 	    };
-
 	    return _this;
 	  }
 
@@ -50586,8 +50689,34 @@
 	      }
 	    }
 	  }, {
+	    key: "componentWillMount",
+	    value: function componentWillMount() {
+	      var _this2 = this;
+
+	      var accArr = [],
+	          conArr = [];
+	      if (this.props.location.query.a) {
+	        if (this.props.location.query.a instanceof Array) this.props.location.query.a.map(function (acc) {
+	          accArr.push(acc);
+	        });else accArr.push(this.props.location.query.a);
+	      }
+	      if (this.props.location.query.c) {
+	        if (this.props.location.query.c instanceof Array) this.props.location.query.c.map(function (con) {
+	          conArr.push(con);
+	        });else conArr.push(this.props.location.query.c);
+	      }
+
+	      this.setState({ accountNamesArr: accArr, contactNamesArr: conArr }, function () {
+	        _this2.onChangeHistoryQuery(_this2.state.accountNamesArr, "account");
+	        _this2.onChangeHistoryQuery(_this2.state.contactNamesArr, "contact");
+	        if (_this2.props.location.query.q) _this2.props.onChangeQuery(_this2.props.location.query.q);
+	      });
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
+	      var _this3 = this;
+
 	      return _react2.default.createElement(
 	        "div",
 	        null,
@@ -50597,7 +50726,9 @@
 	          _react2.default.createElement(
 	            "div",
 	            { className: "input-group" },
-	            _react2.default.createElement("input", { type: "text", className: "form-control", placeholder: "Search", value: this.props.query, onChange: this.props.onChangeQuery }),
+	            _react2.default.createElement("input", { type: "text", className: "form-control", id: "historySearch", placeholder: "Search", value: this.props.query, onChange: function onChange(e) {
+	                _this3.props.onChangeQuery(e.target.value);
+	              } }),
 	            _react2.default.createElement(
 	              "span",
 	              { className: "input-group-btn" },

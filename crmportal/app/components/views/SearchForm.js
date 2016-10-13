@@ -6,7 +6,7 @@ export default class extends React.Component{
   constructor(props){
     super(props);
     this.onChangeQuery = (value) => {
-      this.props.onChangeQuery(value.target.value);
+      this.props.onChangeQuery(value);
     }
   }
 
@@ -19,6 +19,7 @@ export default class extends React.Component{
           onChangeHistoryQuery={this.props.onChangeHistoryQuery}
           historyQuery={this.props.historyQuery}
           search={this.props.search}
+          location={this.props.location}
         />
       );
     }
@@ -26,7 +27,7 @@ export default class extends React.Component{
       return (
         <form onSubmit={this.props.search} className="search">
           <div className="input-group">
-            <input type="text" className="form-control" ref="search" placeholder="Search" value={this.props.query} onChange={this.onChangeQuery} />
+            <input type="text" className="form-control" ref="search" placeholder="Search" value={this.props.query} onChange={(e)=>{this.onChangeQuery(e.target.value)}} />
             <span className="input-group-btn">
               <input type="submit" className="btn btn-default" value="Search" />
             </span>

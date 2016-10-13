@@ -11,7 +11,7 @@ class HistorySearchForm extends React.Component{
   constructor(props){
     super(props);
     this.state = {selectedAccountNames:[],accountNamesArr:[],currAccountText:'',
-                  selectedContactNames:[],contactNamesArr:[],currContactText:''};
+                  selectedContactNames:[],contactNamesArr:[],currContactText:'',query:props.query};
     this.onChangeHistoryQuery = (value,key) =>{
       let obj = this.props.historyQuery;
       obj[key] = value;
@@ -29,7 +29,7 @@ class HistorySearchForm extends React.Component{
     this.changeAccount = (name) => {
         var arr = this.state.accountNamesArr;
         arr.push(name);
-        this.setState({accountNamesArr:arr,selectedAccountNames:[],currAccountText:''}, ()=>{this.onChangeHistoryQuery(this.state.accountNamesArr.join(" "),"account");});
+        this.setState({accountNamesArr:arr,selectedAccountNames:[],currAccountText:''}, ()=>{this.onChangeHistoryQuery(this.state.accountNamesArr,"account");});
     }
     this.updateAccountList = (value) => {
       this.setState({accountNamesArr:value}, ()=>{this.onChangeHistoryQuery(this.state.accountNamesArr.join(" "),"account");});
@@ -47,26 +47,47 @@ class HistorySearchForm extends React.Component{
     this.changeContact = (name) => {
         var arr = this.state.contactNamesArr;
         arr.push(name);
-        this.setState({contactNamesArr:arr,selectedContactNames:[],currContactText:''}, ()=>{this.onChangeHistoryQuery(this.state.contactNamesArr.join(" "),"contact");});
+        this.setState({contactNamesArr:arr,selectedContactNames:[],currContactText:''}, ()=>{this.onChangeHistoryQuery(this.state.contactNamesArr,"contact");});
     }
     this.updateContactList = (value) => {
       this.setState({contactNamesArr:value}, ()=>{this.onChangeHistoryQuery(this.state.contactNamesArr.join(" "),"contact");});
     }
-
-
   }
+
   componentDidMount(){
     if(this.props.accountnames.length < 1){
       accountApi.getAccountNames();
       contactApi.getContactNames();
     }
   }
+  componentWillMount(){
+    var accArr = [],conArr = [];
+    if(this.props.location.query.a){
+      if(this.props.location.query.a instanceof Array)
+        this.props.location.query.a.map((acc)=>{accArr.push(acc)});
+      else
+        accArr.push(this.props.location.query.a);
+    }
+    if(this.props.location.query.c){
+      if(this.props.location.query.c instanceof Array)
+        this.props.location.query.c.map((con)=>{conArr.push(con)});
+      else
+        conArr.push(this.props.location.query.c);
+    }
+
+    this.setState({accountNamesArr:accArr,contactNamesArr:conArr},()=>{
+      this.onChangeHistoryQuery(this.state.accountNamesArr,"account");
+      this.onChangeHistoryQuery(this.state.contactNamesArr,"contact");
+      if(this.props.location.query.q)
+        this.props.onChangeQuery(this.props.location.query.q);
+    });
+  }
   render(){
     return(
       <div>
         <form onSubmit={this.props.search} className="search">
           <div className="input-group">
-            <input type="text" className="form-control" placeholder="Search" value={this.props.query} onChange={this.props.onChangeQuery} />
+            <input type="text" className="form-control" id="historySearch" placeholder="Search" value={this.props.query} onChange={(e)=>{this.props.onChangeQuery(e.target.value)}} />
             <span className="input-group-btn">
               <input type="submit" className="btn btn-default" value="Search" />
             </span>
