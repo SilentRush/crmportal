@@ -273,10 +273,10 @@ def parseHistory(url)
 end
 
 
-#parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate")
-#parseHistory("https://slxweb.sssworld.com/sdata/slx/dynamic/-/history?format=json&count=500&startIndex=206000")
+parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate")
+parseHistory("https://slxweb.sssworld.com/sdata/slx/dynamic/-/history?format=json&count=500&startIndex=206000")
 parseContacts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts?include=Account&select=contactid,FirstName,LastName,NameLF,Name,Createdate,Account/$key,Account/AccountName&format=json&count=100")
-puts @count
+#puts @count
 #Get Tickets and Accounts Modified in the last month
-#parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&format=json&count=500")
-#parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketProblem.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketSolution.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&count=1000&format=json")
+parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&format=json&count=500")
+parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketProblem.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@ or TicketSolution.ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&count=1000&format=json")

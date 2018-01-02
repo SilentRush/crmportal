@@ -266,14 +266,25 @@ end
 
 #parseUsers("https://slxweb.sssworld.com/sdata/slx/dynamic/-/users?format=json&include=UserInfo&select=UserName,$key,UserInfo/FirstName,UserInfo/LastName,Createdate&where=ModifyDate ge @" + Date.today.prev_day.strftime("%Y-%m-%d") + "@")
 #get Tickets and Accounts Modified in the last 5 mins
-d = Time.now
-d = d - 3 * 60
-d = d.iso8601
+d = nil
+File.open('datevar.variable', 'r') { |file| file.each_line do |line|
+    d = line
+  end }
+
+if d == nil
+  d = Time.now
+  d = d - 3 * 60
+  d = d.iso8601
+end
 puts d
 parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate%20ge%20@#{d}@&format=json&count=100")
 parseContacts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/contacts?include=Account&select=contactid,FirstName,LastName,NameLF,Name,Createdate,Account/$key,Account/AccountName&where=ModifyDate%20ge%20@#{d}@&format=json&count=500")
 parseTickets("https://slxweb.sssworld.com/sdata/slx/dynamic/-/tickets?include=TicketSolution,TicketProblem,AssignTo,Account&select=subject,ticketid,TicketSolution/notes,TicketProblem/notes,CreateDate,NeededByDate,ReceivedDate,Account/AccountName,AssignedTo/User/UserName&where=ModifyDate%20ge%20@#{d}@%20or%20TicketProblem.ModifyDate%20ge%20@#{d}@%20or%20TicketSolution.ModifyDate%20ge%20@#{d}@&count=100&format=json")
 parseHistory("https://slxweb.sssworld.com/sdata/slx/dynamic/-/history?format=json&count=500&where=ModifyDate%20ge%20@#{d}@")
+
+d = Time.now
+d = d.iso8601
+File.open('datevar.variable', 'w') { |file| file.write(d) }
 
 #Get Tickets and Accounts Modified in the last 3 months
 #parseAccounts("https://slxweb.sssworld.com/sdata/slx/dynamic/-/accounts?include=Address&select=accountid,accountname,Notes,Address/Address1,Address/State,Address/City,Address/PostalCode,Createdate&where=ModifyDate ge @" + Date.today.prev_month.strftime("%Y-%m-%d") + "@&format=json&count=500")

@@ -32,6 +32,7 @@ export default class TicketMiniList extends React.Component{
       var pageCount = Math.ceil(this.props.tickets.total / 15);
     else
       var pageCount = 0;
+    console.log(this.props.tickets.hits);
 
     return(
       <div className="AccountMiniDetailContainer card-shadow">
